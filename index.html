@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--
+  랜딩 정적 템플릿 — pipeline/build_landing.py 가 이 파일 + app/data/mart.json 을 읽어
+  landing/index.html 을 생성한다. 이 파일을 직접 브라우저로 열면 {{...}} 자리표시자가 그대로 보인다.
+
+  자리표시자 목록 (build_landing.py 가 채운다):
+    17 완료 12 · 운영중 3 · 진행중 2 7 년+ 데이터·공간데이터 직군 누적 355
+    https://halodata.streamlit.app  — Streamlit 대시보드 절대 URL
+    597a2112-2810-45c9-bb63-959b747ed4eb  — 환경변수에서 주입 (없으면 폼 대신 메일 주소 안내가 뜬다)
+    2026-07-23       — 빌드 시각 (푸터 표기)
+
+  마크업은 app/components/*.py 의 HTML 을 그대로 옮긴 것이다. 클래스명을 바꾸지 않았으므로
+  기존 랜딩 CSS 가 그대로 먹는다(핸드오프 실측: 랜딩 CSS 의 81%는 Streamlit 비종속).
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Halo · 김소율 — Data Analytics Engineer</title>
+<meta name="description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 데이터 수집·모델링·BI 대시보드·운영 자동화를 한 흐름으로 설계하는 데이터 분석가/엔지니어 포트폴리오.">
+<link rel="canonical" href="https://syhalo.github.io/halodata">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Halo · 김소율 — Data Analytics Engineer">
+<meta property="og:description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 수집부터 운영까지 한 흐름으로 설계합니다.">
+<meta property="og:image" content="https://syhalo.github.io/halodata/assets/screens/halo-overview.webp">
+<meta property="og:url" content="https://syhalo.github.io/halodata">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#15231f">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ── NAV — 상단 얇은 바 (rail 대체). Streamlit 판 nav.py 의 _landing_html 이식 ── -->
+<nav class="ca-nav">
+  <div class="bar">
+    <a class="ca-brand" href="#top">
+      <span class="glyph"></span> Halo
+      <span class="role">Data Analytics Engineer</span>
+    </a>
+    <div class="ca-links">
+      <a href="https://github.com/syhalo" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+      <a href="https://www.linkedin.com/in/soyoul-kim-9b648316b" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+      <a class="pill" href="https://halodata.streamlit.app">Dashboard ↗</a>
+    </div>
+  </div>
+</nav>
+
+<main class="ca-stream">
+
+<!-- ── HERO — 헤드라인 + CTA + 전폭 제품 화면 ── -->
+<header class="ca-hero" id="top">
+  <div class="ca-hero-copy">
+    <span class="ca-eyebrow">Data Analytics Engineer · 김소율</span>
+    <h1>흩어진 정보를,<br><span class="ca-flow-em">누구나 바로 보는</span><br>하나의 화면으로.</h1>
+    <p class="ca-tech-line"><span>데이터 수집</span><span>모델링</span><span>BI 대시보드</span><span>운영 자동화</span></p>
+    <div class="ca-cta-row">
+      <a class="ca-btn ca-btn-primary" href="https://halodata.streamlit.app">Live Dashboard 보기 <span class="ar">↗</span></a>
+      <a class="ca-btn ca-btn-ghost" href="#contact">데이터 고민 이야기하기 <span class="ar">↓</span></a>
+    </div>
+  </div>
+  <!-- 캐러셀 — 자체 대시보드와 납품 화면을 번갈아 보여 "무엇을 만드는 사람인지"를 첫 화면에서 전달한다.
+       자동 전환이 기본이고, 도트를 누르거나 화면을 클릭하면 수동으로 넘길 수 있다(그때 타이머가 리셋된다).
+       각 이미지의 data-cap 이 캡션으로 올라가므로 지금 보는 게 무슨 화면인지 항상 드러난다.
+       접근성: prefers-reduced-motion 이면 자동 전환을 하지 않고 수동 조작만 남는다. -->
+  <figure class="ca-hero-shot">
+    <div class="ca-carousel" data-carousel>
+      <img class="is-active" src="assets/screens/halo-overview.webp" data-cap="Career Overview · 직접 운영 중인 커리어 대시보드" alt="직접 운영 중인 커리어 대시보드 Overview 화면 — 프로젝트 수·경력·빌드 활동·역량 분포 차트" loading="eager" width="1400" height="737">
+      <img src="assets/screens/screen-11.webp" data-cap="조직 인원 추이 · 월별 인건비·입퇴사 대시보드" alt="조직 인원 추이를 꺾은선·막대로 보여주는 운영 대시보드 — 수치는 가림 처리" loading="eager" width="1917" height="1073">
+      <img src="assets/screens/screen-19.webp" data-cap="위성 영상 분석 · 멀티스펙트럼 타일 뷰" alt="위성 멀티스펙트럼 영상을 타일로 배치한 분석 화면" loading="eager" width="839" height="525">
+      <img src="assets/screens/screen-16.webp" data-cap="산업별 운영 대시보드 · 통신 · 제조 · 모빌리티 · 환경" alt="여러 산업 도메인의 대시보드 화면 모음" loading="lazy" width="1329" height="535">
+      <img src="assets/screens/screen-17.webp" data-cap="센서 시계열 · 설비 모니터링 화면" alt="센서 시계열 데이터를 다중 패널로 보여주는 모니터링 화면" loading="lazy" width="1292" height="525">
+    </div>
+    <figcaption class="ca-v5-cap" data-carousel-caption>Career Overview · 직접 운영 중인 커리어 대시보드</figcaption>
+  </figure>
+</header>
+
+<!-- ── IMPACT — 성과 지표 밴드 (다크). 값은 mart 파생 ── -->
+<section class="ca-metrics" id="impact" aria-label="주요 지표">
+  <div class="impact-head">
+    <div>
+      <div class="sec-kicker">Proof, not promise</div>
+      <h2>여러 기업의 데이터 시스템을 구축하며,<br>정보가 실제 업무에서 쓰이는 구조를 만들어왔습니다.</h2>
+    </div>
+    <p class="ih-lede">기술 이름보다 결과를 먼저 보여드립니다. 아래 수치는 프로젝트 기록과 실측 결과에서 가져왔습니다.</p>
+  </div>
+  <div class="impact-grid">
+    <article class="impact-item">
+      <b class="m-value">17</b>
+      <span class="m-desc">구조화된 프로젝트 기록</span>
+      <small class="m-sub">완료 12 · 운영중 3 · 진행중 2</small>
+    </article>
+    <article class="impact-item">
+      <b class="m-value">7<i>년+</i></b>
+      <span class="m-desc">데이터·공간데이터 직군 누적</span>
+      <small class="m-sub">Career total</small>
+    </article>
+    <!-- ③·④ 는 mart 의 구조화 필드가 아니라 projects[].body 서술 문장에서 가져온 실측치라
+         여기 직접 적는다(하드코딩 유지 결정 2026-07-21). 값이 바뀌면 아래 출처 문서를 함께 고친다.
+         ③ 출처: 판매 대시보드 자동화 — "약 7일 걸리던 수작업 보고서 반영을 1시간(검수 포함 1일)으로 단축"
+         ④ 출처: Bronze 메타데이터 관리 AI Agent — 자연어 명령 1회로 224개 테이블 생성, 44초 -->
+    <article class="impact-item">
+      <b class="m-value"><i>7일 → </i>1시간</b>
+      <span class="m-desc">수작업 보고서 반영 시간</span>
+      <small class="m-sub">검수 포함 시 1일</small>
+    </article>
+    <article class="impact-item impact-flag">
+      <b class="m-value">224<i>개 · 44초</i></b>
+      <span class="m-desc">테이블 일괄 생성 실측</span>
+      <small class="m-sub">자연어 명령 한 번으로</small>
+    </article>
+  </div>
+</section>
+
+<!-- ── OUTCOMES — 변화 3항목 (좌우 교차) ──
+     항목마다 이미지 한 장을 좌우 교차로 붙이고, 가운데만 is-flipped 로 뒤집어 스크롤 시
+     시선이 지그재그로 움직인다(docs/DESIGN.md §9-1).
+
+     이미지는 제품 화면 캡처가 아니라 **상황 일러스트**다(2026-07-22 교체). 이 섹션의 주장은
+     "바꾸는 것은 화면이 아니라 업무"인데, 화면 캡처는 결과만 담고 그 다음에 사람이 무엇을
+     하는지를 담지 못해 서브 문구(연결·기준·역할 분기)와 만나지 않았다. 캡처를 크롭해 쓰던
+     방식은 두 가지가 더 걸렸다 — 570px 로 줄면 본문 글자가 전부 뭉개지고, 마스킹한 자국이
+     "보여줄 수 없는 것"이라는 신호가 되어 증거력을 깎았다(§9-3).
+     실제 화면 근거는 히어로·Proof 섹션이 계속 들고 있다. -->
+<section class="ca-outcomes" id="outcomes" aria-label="데이터가 만드는 변화">
+  <div class="sec-head">
+    <div>
+      <div class="sec-kicker">What changes</div>
+      <h2>잘 정리한 데이터 환경이 바꾸는 것은<br>화면이 아니라 업무입니다.</h2>
+    </div>
+    <p class="sh-lede">대시보드보다 중요한 것은, 그 이후의 업무입니다.</p>
+  </div>
+
+  <article class="ca-v5-alt s-raw">
+    <figure class="ca-v5-alt-media">
+      <img src="assets/screens/ai_img_whatchange_01.webp" alt="흩어져 있던 CSV·PDF·데이터베이스·API 자료가 한 줄기로 모여 노트북 한 화면에서 확인되는 장면을 그린 일러스트" loading="eager" width="1700" height="925">
+    </figure>
+    <div class="ca-v5-alt-copy">
+      <small class="oc-idx">01</small>
+      <h3>찾는 시간은 줄이고, 판단하는 시간은 늘립니다.</h3>
+      <p>흩어진 데이터와 문서를 한곳에 연결해, 필요한 정보를 빠르게 확인할 수 있게 합니다.</p>
+      <span class="oc-tag">정보 접근</span>
+    </div>
+  </article>
+
+  <article class="ca-v5-alt is-flipped s-cur">
+    <figure class="ca-v5-alt-media">
+      <img src="assets/screens/ai_img_whatchange_02.webp" alt="서로 다른 화면을 보며 갸웃하던 사람들이 표준 정의 문서를 기준으로 삼은 뒤 같은 화면을 보고 수긍하는 장면을 그린 일러스트" loading="eager" width="2816" height="1536">
+    </figure>
+    <div class="ca-v5-alt-copy">
+      <small class="oc-idx">02</small>
+      <h3>같은 숫자를 두고 다시 논쟁하지 않게 합니다.</h3>
+      <p>지표의 의미와 산정 기준을 통일해, 누가 보더라도 같은 답을 얻을 수 있게 합니다.</p>
+      <span class="oc-tag">기준 통일</span>
+    </div>
+  </article>
+
+  <article class="ca-v5-alt s-mart">
+    <figure class="ca-v5-alt-media">
+      <img src="assets/screens/ai_img_whatchange_03.webp" alt="방금 갱신된 경영 대시보드를 함께 보며 다음 실행 계획을 결정하는 팀 회의 장면을 그린 일러스트" loading="eager" width="1536" height="1024">
+    </figure>
+    <div class="ca-v5-alt-copy">
+      <small class="oc-idx">03</small>
+      <h3>보고서를 실행의 시작으로 만듭니다.</h3>
+      <p>역할에 맞는 화면과 자동 갱신으로, 숫자 확인이 다음 판단과 행동으로 이어지게 합니다.</p>
+      <span class="oc-tag">의사결정</span>
+    </div>
+  </article>
+</section>
+
+<!-- ── DELIVERY — 수집·모델링·운영 3카드 + 아키텍처 도면 ── -->
+<svg aria-hidden="true" width="0" height="0" style="position:absolute">
+  <!-- 카드 아이콘 3종 — 카피의 동사를 그대로 그린다. 스트로크 폭·색은 CSS(.story-icon svg)가 준다.
+       27px 로 렌더되므로 요소는 4개 이하로 유지한다.
+       connect : 서로 다른 출처 셋이 하나로 모인다 (구 아이콘은 DB 드럼 한 개라 '연결'이 안 보였다)
+       model   : 눈금 있는 자 — '기준을 맞춘다' (구 아이콘은 표 3줄이라 목록으로 읽혔다)
+       operate : 화면 + 순환 화살표 — '자동 갱신되며 계속 쓰인다' (구 아이콘은 추세선이라 분석으로 읽혔다) -->
+  <symbol id="dl-connect" viewBox="0 0 32 32"><circle cx="7" cy="7" r="2.6"/><circle cx="7" cy="16" r="2.6"/><circle cx="7" cy="25" r="2.6"/><circle cx="25" cy="16" r="3.4"/><path d="M9.5 8.4 21.7 14.5M9.6 16h11.9M9.5 23.6 21.7 17.5"/></symbol>
+  <symbol id="dl-model" viewBox="0 0 32 32"><rect x="4" y="11" width="24" height="10" rx="2"/><path d="M10 11v3.6M16 11v5.2M22 11v3.6"/></symbol>
+  <symbol id="dl-operate" viewBox="0 0 32 32"><rect x="4" y="6" width="24" height="15" rx="2"/><path d="M12 26h8M16 21v5"/><path d="M19.7 13.6a3.9 3.9 0 1 1-1.5-3.1"/><path d="M20.3 9.2v3.4h-3.4"/></symbol>
+</svg>
+
+<section class="ca-delivery" id="delivery">
+  <div class="sec-head">
+    <div>
+      <div class="sec-kicker">End-to-end delivery</div>
+      <h2>수집부터 운영까지,<br>끊기지 않는 흐름을 만듭니다.</h2>
+    </div>
+    <p class="sh-lede">만드는 데서 나아가, 운영까지 이어지는 구조를 함께 설계합니다.</p>
+  </div>
+
+  <div class="story-grid">
+    <article class="story-card s-raw">
+      <span class="story-icon"><svg><use href="#dl-connect"/></svg></span>
+      <small>01 · CONNECT</small>
+      <h3>데이터를 연결합니다</h3>
+      <p>DB · 문서 · API를 안정적인 수집 흐름으로 연결합니다.</p>
+    </article>
+    <article class="story-card s-cur">
+      <span class="story-icon"><svg><use href="#dl-model"/></svg></span>
+      <small>02 · MODEL</small>
+      <h3>기준을 맞춥니다</h3>
+      <p>지표와 관계를 모델링해 같은 질문에 같은 답을 만듭니다.</p>
+    </article>
+    <article class="story-card s-mart">
+      <span class="story-icon"><svg><use href="#dl-operate"/></svg></span>
+      <small>03 · OPERATE</small>
+      <h3>업무를 지원합니다</h3>
+      <p>BI 화면 · 자동 갱신 · 인계까지 실제 사용에 맞춰 운영합니다.</p>
+    </article>
+  </div>
+
+  <div class="arch-statement">
+    <div class="as-copy">
+      <p class="as-lead">데이터를 수집하고, 정리하고, 필요한 사람에게 전달하는 <b>흐름</b>을 설계합니다. 새로운 데이터가 들어와도 같은 방식으로 반복되고, 사람이 믿고 사용할 수 있으며 <b>분석과 AI에도 활용할 수 있는 시스템</b>을 만드는 것이 목표입니다.</p>
+    </div>
+    <figure class="as-shot">
+      <!-- 도면 3장을 같은 칸에서 돌린다(Hero·Proof 와 같은 캐러셀 컴포넌트).
+           한 장만 두면 "예시 하나"로 읽히지만, 그린 손이 서로 다른 도면이 이어지면 여러 현장을
+           거친 표본으로 읽힌다. 그래서 정식 아키텍처 산출물 톤과 팀 화이트보드 스케치 톤을 섞었다.
+           SVG 는 파일에 width/height 가 없어(반응형) <img> 로 쓰면 높이가 0 이 되므로
+           viewBox 비율(1200×632)을 속성으로 알려준다. -->
+      <div class="ca-carousel as-carousel" data-carousel>
+        <img class="is-active" src="assets/arch-quicksight-automation.svg" data-cap="Pipeline · 수집에서 리포트 회수까지" alt="업로드된 파일이 수집 계층을 거쳐 대시보드로 이어지고, 생성된 리포트가 다시 사용자에게 회수되는 파이프라인 도면" loading="eager" width="1200" height="632">
+        <img src="assets/arch-metadata-ingestion.webp" data-cap="Metadata-driven ingestion · 메타가 적재를 구동" alt="소스 DB와 파일이 메타 테이블과 오케스트레이터를 거쳐 자동으로 적재되고 브론즈·실버·골드 계층으로 승격되는 아키텍처 도면" loading="eager" width="2400" height="1280">
+        <img src="assets/arch-collab-medallion.webp" data-cap="Collab data · raw → stage → mart → 팀 화면" alt="협업 도구 API와 시트가 매일 도는 수집 잡을 거쳐 raw·stage·mart 세 계층으로 정리되고 팀 화면으로 이어지는 손그림 도면" loading="eager" width="2400" height="1280">
+      </div>
+      <!-- 실제 납품 도면 그대로가 아니라 구조만 남긴 예시임을 표시한다. -->
+      <span class="as-sample" aria-hidden="true">Sample</span>
+      <figcaption class="ca-v5-cap" data-carousel-caption>Pipeline · 수집에서 리포트 회수까지</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ── PROOF — Living Portfolio (좌 카피 / 우 실제 화면 겹침) ── -->
+<section class="ca-proof" id="proof">
+  <div class="proof-copy">
+    <div class="sec-kicker">Living portfolio · proof of work</div>
+    <h2>제가 만드는 시스템을,<br>저 자신에게도 사용합니다.</h2>
+    <p class="proof-lede">제 프로젝트와 경력을 목록으로만 남기지 않고, 직접 만든 대시보드로 운영합니다. 새 기록이 생길 때마다 데이터와 화면이 함께 업데이트되는 <b>살아있는 포트폴리오</b>입니다.</p>
+    <div class="proof-points">
+      <div class="proof-point"><b>01</b><span>무엇을 해왔는지, 커리어를 흐름으로 살펴봅니다.</span></div>
+      <div class="proof-point"><b>02</b><span>무엇을 할 수 있는지, 실제 화면으로 보여줍니다.</span></div>
+      <div class="proof-point"><b>03</b><span>새 프로젝트가 생기면 기록과 화면이 함께 자랍니다.</span></div>
+    </div>
+    <div class="ca-cta-row">
+      <a class="ca-btn ca-btn-primary" href="https://halodata.streamlit.app">작동하는 대시보드 보기 <span class="ar">↗</span></a>
+    </div>
+  </div>
+  <div class="proof-visual">
+    <!-- 겹침 스택에서 캐러셀로 바꿨다(사용자 요청) — 두 장을 포개 놓기만 하면 뒤 장이 늘 가려진다.
+         전환하면 같은 자리에서 "무엇을 운영하는가"(대시보드)와 "어떻게 만들어지는가"(생산 흐름)를
+         모두 보여줄 수 있다. 다만 겹쳐 보이는 모습 자체가 좋다는 피드백이 있어(사용자), 두 화면을
+         CSS 로 겹치는 대신 **겹친 상태를 이미지 한 장으로 구워** 캐러셀에 넣었다 — 전환해도
+         겹침 구도가 유지되고, 캐러셀의 absolute 레이어와 겹침 레이어가 충돌하지 않는다. 흐름 도면은 캐러셀에서 몇 초만 노출되므로 상세본이 아니라
+         압축본(provenance-compact.svg)을 쓴다. -->
+    <div class="ca-carousel" data-carousel>
+      <img class="is-active" src="assets/screens/halo-proof-stack.webp" data-cap="Overview · Build log — 운영 중인 실제 화면" alt="커리어 대시보드 Overview 화면과 빌드 활동 히트맵을 겹쳐 놓은 모습" loading="eager" width="1400" height="782">
+      <img src="assets/provenance-compact.svg" data-cap="Data provenance · 기록에서 화면까지" alt="옵시디언 기록이 규칙 레이어를 거쳐 빌드되고 대시보드로 이어지는 데이터 생산 흐름 도면" loading="eager" width="1400" height="782">
+    </div>
+    <span class="ca-v5-cap" data-carousel-caption>Overview · Build log — 운영 중인 실제 화면</span>
+  </div>
+</section>
+
+<!-- ── CONTACT — 마무리 CTA + 문의 폼 + P.S. ── -->
+<footer class="ca-foot" id="contact">
+  <div class="ca-foot-cta">
+    <div class="ca-foot-kicker">Contact · 함께 일하기</div>
+    <h2>좋은 데이터는,<br><span class="ca-flow-em">좋은 질문</span>에서 시작됩니다.</h2>
+    <p class="ca-foot-lede">정보가 여러 곳에 흩어져 있거나, 숫자가 헷갈리거나, 보고서를 봐도 다음 행동이 보이지 않는다면 — <b>지금의 상황부터 함께 정리</b>해보겠습니다.</p>
+  </div>
+
+  <!-- P.S. 는 폼 위에 둔다 — 폼을 만나기 전에 "거창한 의뢰가 아니어도 된다"를 먼저 읽어야
+       입력 문턱이 낮아진다. 폼 아래에 두면 이미 쓸지 말지 정한 뒤에 읽게 된다(사용자 요청). -->
+  <p class="ca-foot-note"><span class="ps">P.S.</span> <span>거창한 의뢰가 아니어도 괜찮아요. <span class="uline">데이터 때문에 막막한 순간<svg viewBox="0 0 220 8" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5 C44 1 70 8 110 3.4 C150 -1 180 7 218 4"/></svg></span>이 있다면, 그 얘기부터 편하게 들려주세요.</span></p>
+
+  <!-- 폼은 페이지에 직접 둔다 — Streamlit 판에서 iframe(components.html)을 쓴 건 st.html 이
+       <script> 를 새니타이즈했기 때문이고, 정적에서는 그 우회가 필요 없다. 색도 CSS 변수를 그대로 쓴다. -->
+  <div class="cf-card" id="cf-card">
+    <div class="cf-head">✉ 이메일로 문의</div>
+    <form class="cf" id="cf">
+      <div class="cf-row">
+        <div class="cf-field"><label for="cf-name">성함 / 회사</label><input id="cf-name" name="name" placeholder="선택 입력"></div>
+        <div class="cf-field"><label for="cf-email">회신받을 이메일</label><input id="cf-email" name="email" type="email" placeholder="선택 입력"></div>
+      </div>
+      <div class="cf-field"><label for="cf-subject">제목</label><input id="cf-subject" name="subject" placeholder="어떤 일로 연락 주셨나요?"></div>
+      <div class="cf-field"><label for="cf-message">내용</label><textarea id="cf-message" name="message" placeholder="데이터 때문에 막막한 순간, 그 얘기부터 편하게 적어주세요."></textarea></div>
+      <input type="checkbox" name="botcheck" class="cf-hp" tabindex="-1" autocomplete="off">
+      <div class="cf-actions">
+        <button type="submit" id="cf-btn">보내기 →</button>
+        <div class="cf-status" id="cf-status" role="status" aria-live="polite"></div>
+      </div>
+    </form>
+  </div>
+
+  <div class="ca-foot-id">
+    <span class="glyph"></span><b>Halo</b> · 김소율
+    <small>Built 2026-07-23</small>
+  </div>
+</footer>
+
+</main>
+
+<script>
+  // Hero 캐러셀 — 자동 전환 + 클릭/도트 수동 조작.
+  // CSS 애니메이션 대신 JS 로 옮긴 이유: 사용자가 개입할 수 있어야 하는데(클릭·도트),
+  // @keyframes 는 진행 중인 애니메이션을 특정 장으로 점프시키기가 까다롭다. 상태(is-active) 하나만
+  // 옮기고 전환은 CSS transition 에 맡기면 장 수가 늘어도 타이밍 계산이 필요 없다.
+  (function () {
+    var INTERVAL = 3000;                       // 장당 노출(ms) — 전환 0.6s 포함
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var timers = [], restarters = [];
+
+    // 페이지에 캐러셀이 여럿이다(Hero·Proof). 각자 자기 상태를 갖도록 하나씩 초기화한다.
+    document.querySelectorAll('[data-carousel]').forEach(function (root) {
+      var slides = [].slice.call(root.querySelectorAll('img'));
+      if (slides.length < 2) return;
+      // 캡션은 같은 figure/컨테이너 안에서 찾는다 — 전역으로 찾으면 다른 캐러셀 것을 집는다.
+      var scope = root.closest('figure, .proof-visual') || document;
+      var caption = scope.querySelector('[data-carousel-caption]');
+      var index = 0, timer = null;
+
+      // 도트 — 몇 장인지 보이고 직접 고를 수 있게 한다. 장 수를 세어 만들므로 이미지를 늘려도 그대로 동작한다.
+      var dots = document.createElement('div');
+      dots.className = 'ca-dots';
+      slides.forEach(function (slide, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'ca-dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', (i + 1) + '번째 화면 보기');
+        dot.addEventListener('click', function (e) { e.stopPropagation(); show(i); restart(); });
+        dots.appendChild(dot);
+      });
+      root.appendChild(dots);
+
+      function show(next) {
+        index = (next + slides.length) % slides.length;
+        slides.forEach(function (slide, i) { slide.classList.toggle('is-active', i === index); });
+        [].slice.call(dots.children).forEach(function (dot, i) { dot.classList.toggle('is-active', i === index); });
+        var cap = slides[index].getAttribute('data-cap');
+        if (caption && cap) caption.textContent = cap;
+      }
+
+      function restart() {
+        if (timer) clearInterval(timer);
+        if (reduced) return;                   // 움직임 최소화 요청 시 자동 전환은 하지 않는다
+        timer = setInterval(function () { show(index + 1); }, INTERVAL);
+        timers.push(timer);
+      }
+
+      // 뒷 장 프리로드 — 첫 화면 렌더를 막지 않도록 load 이후에 당겨온다.
+      // 겹쳐 놓은 absolute 이미지는 브라우저의 lazy 교차 판정이 실패해 자기 차례가 와도 로드되지 않는다.
+      // loading 속성만 eager 로 바꾸는 것으로는 부족하다 — 이미 lazy 로 결정된 요소는 다시 요청하지
+      // 않으므로, 별도 Image 로 받아 캐시에 올린다.
+      window.addEventListener('load', function () {
+        slides.forEach(function (slide) {
+          if (slide.naturalWidth === 0) {
+            var preload = new Image();
+            preload.src = slide.currentSrc || slide.src;
+          }
+        });
+      });
+
+      // 화면 아무 데나 클릭해도 다음 장으로 넘어간다(도트는 위에서 자체 처리하고 버블링을 막는다).
+      root.addEventListener('click', function () { show(index + 1); restart(); });
+      restarters.push(restart);
+      restart();
+    });
+
+    // 탭이 백그라운드일 때 돌릴 이유가 없다. 돌아오면 각 캐러셀이 자기 타이머를 다시 건다.
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) {
+        timers.forEach(clearInterval);
+        timers.length = 0;
+      } else {
+        restarters.forEach(function (fn) { fn(); });
+      }
+    });
+  })();
+
+  // 문의 폼 — 브라우저에서 Web3Forms 로 직접 POST. Streamlit 판 footer.py 의 스크립트를 그대로 옮겼다.
+  (function () {
+    var ACCESS_KEY = "597a2112-2810-45c9-bb63-959b747ed4eb", TO_HINT = "syoul.halo@gmail.com";
+    var form = document.getElementById('cf'), btn = document.getElementById('cf-btn'), box = document.getElementById('cf-status');
+    if (!form) return;
+    if (!ACCESS_KEY) {
+      // 키가 없으면 폼을 감추고 주소만 안내한다(빌드 환경에 시크릿이 없을 때).
+      document.getElementById('cf-card').innerHTML =
+        '<div class="cf-head">✉ 이메일로 문의</div><p class="cf-status">문의 폼이 아직 설정되지 않았어요. ' + TO_HINT + ' 로 보내주세요.</p>';
+      return;
+    }
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      box.className = 'cf-status'; box.textContent = '';
+      var data = Object.fromEntries(new FormData(form).entries());
+      if (data.botcheck) return;                       // 허니팟 — 봇이면 조용히 중단
+      var message = (data.message || '').trim();
+      if (!message) { box.className = 'cf-status err'; box.textContent = '내용을 입력해 주세요.'; return; }
+      var sign = [data.name, data.email].map(function (s) { return (s || '').trim(); }).filter(Boolean);
+      var payload = {
+        access_key: ACCESS_KEY,
+        subject: '[포트폴리오 문의] ' + ((data.subject || '').trim() || '데이터 협업 문의'),
+        from_name: (data.name || '').trim() || '포트폴리오 방문자',
+        message: message + (sign.length ? '\n\n— ' + sign.join(' · ') : '')
+      };
+      if ((data.email || '').trim()) payload.email = data.email.trim();   // Web3Forms 는 email 을 회신 주소로 사용
+      btn.disabled = true; btn.textContent = '보내는 중…';
+      try {
+        var res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        var json = await res.json();
+        if (json.success) { box.className = 'cf-status ok'; box.textContent = '보냈어요! 확인하는 대로 회신드릴게요.'; form.reset(); }
+        else { box.className = 'cf-status err'; box.textContent = '전송 실패: ' + (json.message || '') + ' — ' + TO_HINT + ' 로 보내주세요.'; }
+      } catch (err) {
+        box.className = 'cf-status err'; box.textContent = '네트워크 문제로 전송하지 못했어요 — ' + TO_HINT + ' 로 보내주세요.';
+      } finally {
+        btn.disabled = false; btn.textContent = '보내기 →';
+      }
+    });
+  })();
+</script>
+</body>
+</html>

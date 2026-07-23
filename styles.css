@@ -1,0 +1,1925 @@
+/* ============================================================
+   랜딩 전용 스타일 — app/static/styles.css 에서 이관 (2026-07-21)
+   정적 랜딩(landing/index.html)이 쓰는 유일한 스타일시트다.
+   Streamlit chrome 을 숨기던 규칙과 rail 관련 구획(SPLIT SHELL·RAIL)은 가져오지 않았다.
+   ============================================================ */
+
+/* ── 이관: 전역 토큰 ── */
+/* ============================================================
+   김소율 포트폴리오 — 전역 스타일 (단일 출처)
+   시안: sandbox/prototypes/design_handoff_landing/index.html
+   컴포넌트는 HTML 구조만 담당하고, 스타일은 모두 여기 모은다.
+   ============================================================ */
+
+/* IBM Plex 단일 패밀리 3종(Sans KR·Mono·Serif) — 한글·영문이 한 뿌리라 혼용 시 x-height·웨이트가
+   어긋나지 않는다. 전부 오픈소스. 규칙 → docs/DESIGN.md §4 */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:wght@400;500;600&family=Nanum+Pen+Script&display=swap');
+
+/* ── 전역 리셋 ──
+   box-sizing: border-box — 폭 계산에 padding·border 를 포함시킨다. Streamlit 시절에는 프레임워크
+   기본 스타일이 이 리셋을 깔아 줬는데, 정적 랜딩으로 분리하면서 사라져 `width:100%` + 좌우 padding
+   요소가 화면보다 넓어졌다(모바일 375px 에서 main.ca-stream 이 375+56*2=487px → 가로 스크롤).
+   개별 규칙에 box-sizing 을 덧대는 대신 여기서 한 번에 깐다. */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ── 디자인 토큰 ── */
+:root {
+  /* 색 토큰의 캐노니컬 = v4(그린 내추럴) 단일 테마. theme.THEMES['v4'] 와 값이 일치한다
+     (2026-07-21 단일화 — DECISIONS 참조). inject_theme 은 같은 값을 재주입하는 no-op 에 가깝고,
+     테마 재도입 시에만 실질 오버라이드가 된다. */
+  --bg: #f7f6f0;
+  --bg2: #ece9dd;
+  --surface: #fffefa;
+  --surface2: #f2efe4;
+  --line: rgba(21, 35, 31, .12);
+  --line2: rgba(21, 35, 31, .20);
+  --ink: #15231f;
+  --ink2: #54615a;
+  --ink3: #8a958f;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  /* --sans 와 --kr 은 같은 값이다. IBM Plex Sans KR 이 한글·영문을 모두 덮으므로 분기가 필요 없다.
+     참조처가 많아 변수명은 남겨 두되(의미 구분), 값은 하나로 수렴시킨다. */
+  --sans: 'IBM Plex Sans KR', 'IBM Plex Sans', sans-serif;
+  --kr: var(--sans);
+  /* 영문 강조 전용 — 키워드·인용문·숫자. 한글 본문에는 쓰지 않는다(DESIGN.md §4-3). */
+  --serif: 'IBM Plex Serif', Georgia, serif;
+  --pen: 'Nanum Pen Script', var(--kr);
+  /* 필기체 메모(hero·footer P.S.) 공통 크기 — 반응형(작은 화면 22px ~ 큰 화면 34px, ~1280px에서 30px).
+     두 곳(.ca-hero-note p·.ca-foot-cta .ca-foot-note)이 함께 움직이도록 단일 출처로 둔다. */
+  --pen-note-size: clamp(22px, 2.35vw, 30px);
+  /* 개념 축(stage) — 그린 단일 hue 명암 램프. taxonomy palette tone1~4 미러(테마 v4). */
+  --tone1: #8fbfa3;
+  --tone2: #4c9271;
+  --tone3: #3a7058;
+  --tone4: #2a5443;
+  /* 기술 축(capability) — taxonomy palette tone5~8 미러(테마 v4, stage 와 계열 분리). */
+  --tone5: #bc633d;
+  --tone6: #ca9b48;
+  --tone7: #3f8f7e;
+  --tone8: #8a9c5a;
+  --muted: #65736c;
+  /* 비활성·중립 — taxonomy palette.muted 미러. 미매핑 색 키의 var(--muted) 폴백 */
+  --maxw: 1160px;
+  /* 랜딩 스트림 — 시안 .block(width:100%;max-width:1180px;margin:0 auto;padding:96px 56px) 대응.
+     시안은 패딩을 포함해 1180 을 캡하므로 콘텐츠 폭 = 1180-56*2 = 1068. 우리 구조는 캡이
+     콘텐츠 박스에 걸리므로 1068 을 직접 쓴다(같은 결과·같은 좌측선).
+     전폭 밴드(Impact·Delivery)는 --stream-pad 만큼 음수 마진으로 되돌려 나가므로 둘은 짝이다.
+     --section-y = 시안 .block 의 세로 리듬(96px). 값을 바꿀 땐 한 곳(여기)만 고친다. */
+  --stream-maxw: 1068px;
+  /* 좌우 여백 — 화면 폭에 따라 20~56px. 데스크톱은 시안값 56px 그대로이고, 좁은 화면에서는
+     줄어든다(375px 에서 20px → 콘텐츠 335px). 고정 56px 이던 시절에는 모바일 콘텐츠 폭이
+     263px(화면의 70%)까지 눌렸다 — Streamlit 컨테이너가 자체 반응형 패딩으로 가려 주던 부분이라
+     정적 분리 후에야 드러났다. 전폭 밴드도 같은 변수를 음수 마진으로 되돌리므로 짝이 유지된다. */
+  --stream-pad: clamp(20px, 5vw, 56px);
+  --section-y: 96px;
+  /* 참고: 스트림이 캡에 걸리는 폭은 1068 + 56*2 = 1180px 이고, 전폭 밴드는 이 값을 경계로
+     방식을 바꾼다(아래 "전폭 밴드" 구획). 미디어쿼리는 var() 를 못 받아 1180px 을 직접 쓰므로,
+     --stream-maxw·--stream-pad 를 고치면 그 미디어쿼리 값도 함께 고쳐야 한다. */
+  --grid: rgba(21, 35, 31, .05);
+  /* 미묘한 표면 오버레이(호버·칩 배경 등) — 라이트 테마라 검정 알파(v4 캐노니컬). */
+  --tint-1: rgba(0, 0, 0, .04);
+  --tint-2: rgba(0, 0, 0, .08);
+  --nav-bg: rgba(247, 246, 240, .82);
+  /* panel 계열 — 좌측 rail 처럼 "짙은 패널 위 밝은 글씨" 영역 전용(밝은 테마에서도 어두움, v4 캐노니컬). */
+  --panel: #173e34;
+  /* Impact 성과 밴드 배경 — rail(--panel)과 구분되는 별도 색(시안은 rail=포레스트 / impact=먹빛).
+     글씨·선·액센트는 같은 "짙은 배경 위" 조건이라 panel-ink/-ink2/-line/-accent 를 공유한다.
+     라이트 테마(v4)에선 밴드가 페이지보다 어둡다. 옛 다크 테마에선 반대로 밝게 뒀는데,
+     이미 어두운 페이지 위에서 더 어둡게 하면 배경과 구분되지 않기 때문이었다(실측 대비 1.04). */
+  --band: #15231f;
+  /* Living Portfolio 의 대시보드 목업 — "실제로 운영 중인 화면"이라 라이트 테마에서도 짙어야
+     위계가 산다(시안 .dashboard-card #17201d / .dash-content #101613 / .dash-kpi #1c2822).
+     바깥 카드 → 내부 면 → KPI 타일 3단 관계를 테마마다 같은 명도 순서로 유지한다. */
+  --proof-card: #17201d;
+  --proof-inner: #101613;
+  --proof-tile: #1c2822;
+  /* Delivery 3카드의 기능 구분색 — 시안은 Connect 초록·Model 골드·Operate 파랑 세 휴를 쓴다.
+     이 섹션 한정이며, rail·What changes 의 raw/curated/mart 스테이지 색 언어는 그대로 둔다. */
+  --delivery-connect: #357052;
+  --delivery-model: #a47432;
+  --delivery-operate: #47799a;
+  --panel-ink: #edf6ef;
+  --panel-ink2: #b8d3c4;
+  --panel-line: rgba(233, 248, 236, .25);
+  --panel-accent: #b8e6cc;
+  --flow-dur: 2.4s;
+  /* 차트 라벨 폰트 크기 — HTML 로 그리는 범례·축 라벨이 참조한다.
+     Plotly 는 라벨을 SVG 로 찍어 CSS 를 못 읽으므로, 같은 값을 utils/theme.py 의
+     CHART_LEGEND_SIZE·CHART_AXIS_SIZE 가 들고 있다. 크기 변경은 두 곳을 함께 고친다. */
+  --fs-chart-legend: 12px;
+  --fs-chart-axis: 13px;
+
+  /* ── 타이포 스케일 ── docs/DESIGN.md §2 가 단일 출처.
+     위계는 크기가 아니라 웨이트(400/600/700)로 만든다. 새 크기를 추가하기 전에
+     웨이트로 풀리는지 먼저 확인한다(§4-2). */
+  --fs-display-1: clamp(38px, 4.6vw, 60px);
+  --fs-display-2: clamp(28px, 3.2vw, 40px);
+  --fs-display-3: 26px;
+  --fs-heading-1: 21px;
+  --fs-heading-2: 18px;
+  --fs-body-lg: 17px;
+  --fs-body: 16px;
+  --fs-body-sm: 15px;
+  --fs-caption: 13px;
+  --fs-micro: 12px;
+  --fs-button: 14px;
+
+  /* ── 형태 ── 버튼에 --radius-full 을 쓰지 않는다(풀필=리테일 시그니처, §6). */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* ── 간격 ── 8px 배수가 기본, 2/4/12px 은 미세 조정용. */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-xxl: 32px;
+  --space-xxxl: 48px;
+
+  /* 시스템의 유일한 그림자 — 제품 스크린샷 프레임 전용(§9-1). 카드에는 쓰지 않는다. */
+  --shadow-screenshot: 0 8px 24px rgba(21, 35, 31, .10);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+/* ── 이관: NAV ── */
+/* ============================================================
+   NAV
+   ============================================================ */
+.ca-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Streamlit 기본 링크 스타일(파랑+밑줄) 무력화 */
+.ca-nav a {
+  text-decoration: none !important;
+}
+
+.ca-nav .ca-brand {
+  color: var(--ink);
+}
+
+.ca-nav .bar {
+  /* 스트림과 같은 캡·패딩을 쓴다 — 상단 바의 브랜드가 그 아래 hero 제목과 같은 좌측선에 선다.
+     따로 1160/32px 를 쓰던 시절에는 브랜드만 14px 왼쪽으로 튀어나왔다. */
+  max-width: calc(var(--stream-maxw) + 2 * var(--stream-pad));
+  margin: 0 auto;
+  padding-inline: var(--stream-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.ca-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.ca-brand .glyph {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--tone1), var(--tone2) 55%, var(--tone3));
+  position: relative;
+}
+
+.ca-brand .glyph::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  /* 유일하게 남긴 라디우스 리터럴. 로고는 §7 컴포넌트가 아니라 형상이라 5단 스케일을 따르지
+     않는다 — 이 3px 은 바깥 22px/6px 과 favicon.svg(32px 기준 rx 8/4)의 비례를 맞춘 값이다.
+     토큰(sm 4px)으로 올리면 안쪽 사각형이 바깥보다 덜 각져 글리프가 뭉개진다. */
+  border-radius: 3px;
+  background: var(--bg);
+}
+
+.ca-brand .role {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  border-left: 1px solid var(--line2);
+  padding-left: 11px;
+}
+
+.ca-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.ca-links a {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  text-decoration: none;
+  transition: .2s;
+}
+
+.ca-links a:hover {
+  color: var(--ink);
+}
+
+.ca-links a svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.ca-links .pill {
+  color: var(--ink);
+  border: 1px solid var(--line2);
+  padding: 9px 16px;
+  border-radius: var(--radius-md);   /* 30px → md : nav 버튼 — §6 버튼에 풀필 금지 */
+  white-space: nowrap;
+}
+
+.ca-links .pill:hover {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+@media(max-width:760px) {
+  .ca-links a:not(.pill) {
+    display: none;
+  }
+
+  .ca-brand .role {
+    display: none;
+  }}
+/* ── 이관: HERO ── */
+/* ============================================================
+   HERO
+   ============================================================ */
+/* .ca-hero 의 패딩·구분선은 아래 "섹션 리듬·구분선" 공통 규칙이 소유한다(시안 .block + .hero). */
+
+/* Streamlit 기본 링크 스타일(파랑+밑줄) 무력화 */
+.ca-hero a {
+  text-decoration: none !important;
+}
+
+/* eyebrow — 직함 라벨(가용성 LED 는 좌측 레일로 이동, 여기선 mono 키커) */
+.ca-hero .ca-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--tone2);
+  margin-bottom: 17px;
+}
+
+.ca-hero .ca-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 1px;
+  background: var(--tone2);
+}
+
+/* availability LED 는 좌측 레일(.ca-rail-avail)이 소유한다 — Hero 잔여 스타일(.ca-avail)은 제거.
+   ping 키프레임만 남긴다(레일의 .ca-rail-avail .led::after 가 참조). */
+@keyframes ping {
+  0% {
+    transform: scale(.5);
+    opacity: .8;
+  }
+
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* headline */
+.ca-hero h1 {
+  font-weight: 600;
+  font-size: clamp(38px, 6vw, 66px);
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  max-width: none;
+  text-wrap: balance;
+  color: var(--ink);
+}
+
+/* 강조 텍스트는 .ca-flow-em(단색 tone2 · HERO 섹션에서 정의) 하나로 통일했다 —
+   시안이 h1·contact 모두 단색 `em{color:var(--green)}` 을 쓰기 때문.
+   그라디언트 버전(.ca-flow)은 소비처가 없어 제거했다. */
+
+/* CTA buttons */
+/* 시안 .actions{gap:11px;margin-top:29px} */
+.ca-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 11px;
+}
+
+/* Hero 필기체 메모(.ca-hero-note·.ca-note-arrow)는 hero.py 재구성(2026-07-21)으로 마크업이
+   사라져 제거했다. 같은 필기체 톤은 footer 의 .ca-foot-note 가 이어받는다. */
+
+/* 시안 .button{gap:10px;padding:13px 18px;border-radius:10px;font-size:14px;font-weight:600} */
+.ca-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--kr);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 13px 18px;
+  border-radius: var(--radius-md);   /* 10px → md : CTA — §7 CTA md */
+  white-space: nowrap;
+  transition: .3s cubic-bezier(.2, .7, .2, 1);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.ca-btn .ar {
+  font-family: var(--mono);
+  transition: transform .3s;
+}
+
+.ca-btn.ca-btn-primary {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.ca-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -14px rgba(233, 236, 241, .5);
+}
+
+.ca-btn-primary:hover .ar {
+  transform: translateX(5px);
+}
+
+/* ghost 버튼 — Hero 보조 CTA(Contact) */
+.ca-btn.ca-btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line2);
+}
+
+.ca-btn-ghost:hover {
+  background: var(--surface2);
+  border-color: var(--ink3);
+}
+
+@media(prefers-reduced-motion: reduce) {
+  .ca-rail-avail .led::after {
+    animation: none;
+  }}
+/* ── 이관: DELIVERY ── */
+/* ============================================================
+   DELIVERY (#delivery) — End-to-end delivery (components/delivery.py)
+   시안 landing_v4 의 story 블록 이식. sec-head(공용 헤딩) + story 3카드
+   (수집→모델링→운영) + arch-statement(시안엔 없으나 "운영 가능" 근거로 유지).
+   모든 선택자는 .ca-delivery 스코프로 한정한다.
+   ============================================================ */
+/* 시안 .story{background:var(--cream)} — 배경이 바뀌는 전폭 밴드다(구분선 대신 배경이 흐름을 끊는다).
+   --bg2 는 v4 테마에서 시안 --cream(#ece9dd)과 같은 값이며, 두 테마 각자의 한 단 짙은 표면색이다.
+   전폭 방식은 Impact 밴드와 동일 — 스트림 좌우 패딩을 음수 마진으로 되돌리고 내부를 다시 캡한다. */
+.ca-delivery {
+  margin-inline: calc(-1 * var(--stream-pad));
+  padding: var(--section-y) var(--stream-pad);
+  background: var(--bg2);
+}
+
+.ca-delivery > * {
+  max-width: var(--stream-maxw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* sec-kicker 는 아래 "섹션 헤딩 공통" 규칙(.ca-outcomes·.ca-delivery·.ca-proof)에서 정의한다. */
+/* ── story 3카드 (수집 → 모델링 → 운영) ── */
+.ca-delivery .story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* 시안 .story-card{min-height:220px;padding:24px 20px;background:rgba(255,254,250,.62)} —
+   크림 밴드 위 반투명 흰 카드다(불투명하면 배경과 대비가 세서 밴드 위에 붕 뜬다). */
+.ca-delivery .story-card {
+  min-height: 220px;
+  padding: 24px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);   /* 16px → lg : 큰 카드 — §7 큰 카드 lg */
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  transition: .3s;
+  --sc: var(--tone2);
+}
+
+/* 카드마다 다른 휴 — 시안의 기능 구분(Connect 초록 / Model 골드 / Operate 파랑).
+   스테이지 램프(tone1~3)로 두면 v4 에서 셋 다 초록 계열이라 구분이 죽는다(Codex R03 P2-2).
+   색 언어의 분업: rail·What changes = 흐름(스테이지), Delivery = 기능 구분. */
+.ca-delivery .story-card.s-raw {
+  --sc: var(--delivery-connect);
+}
+
+.ca-delivery .story-card.s-cur {
+  --sc: var(--delivery-model);
+}
+
+.ca-delivery .story-card.s-mart {
+  --sc: var(--delivery-operate);
+}
+
+.ca-delivery .story-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line2);
+}
+
+.ca-delivery .story-icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  /* 시안 42px — 아이콘과 카피 사이를 크게 벌려 카드 높이(220px)를 채운다 */
+  margin-bottom: 42px;
+  border-radius: var(--radius-md);   /* 14px → md : 카드 내부 아이콘 — §7 기본 md */
+  background: color-mix(in srgb, var(--sc) 16%, transparent);
+  color: var(--sc);
+}
+
+.ca-delivery .story-icon svg {
+  width: 34px;
+  height: 34px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ca-delivery .story-card small {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+
+.ca-delivery .story-card h3 {
+  margin: 4px 0 0;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -.05em;
+  color: var(--sc);
+}
+
+.ca-delivery .story-card p {
+  margin: 8px 0 0;
+  font-family: var(--kr);
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--muted);
+  word-break: keep-all;
+}
+
+@media(max-width:720px) {
+  .ca-delivery .story-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-delivery .story-icon {
+    margin-bottom: 18px;
+  }}
+
+/* ── 닫는 선언: 데이터 파이프라인 (연결·자동 반영) ── */
+.ca-delivery .arch-statement {
+  position: relative;
+  overflow: hidden;
+  margin-top: 30px;
+  padding: 28px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);   /* 16px → lg : 큰 카드 — §7 큰 카드 lg */
+  background: linear-gradient(180deg, color-mix(in srgb, var(--tone2) 7%, var(--surface)), var(--surface));
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  align-items: center;
+  gap: 32px;
+}
+
+.ca-delivery .arch-statement::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(var(--tone1), var(--tone2), var(--tone3));
+}
+
+.ca-delivery .as-lead {
+  margin: 0;
+  font-family: var(--kr);
+  font-weight: 400;
+  font-size: clamp(15px, 1.7vw, 17px);
+  line-height: 1.72;
+  color: var(--ink2);
+}
+
+.ca-delivery .as-lead b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.ca-delivery .as-shot {
+  border-radius: var(--radius-lg);   /* 12px → lg : 목업 — §6 스크린샷 프레임 lg */
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #0d1014;
+}
+
+.ca-delivery .as-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media(max-width:720px) {
+  .ca-delivery .arch-statement {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px 22px;
+  }}
+
+/* ── Delivery 아키텍처 도면 (V5 패치 병합분) ──
+   ↑ 위 @media(max-width:720px) 뒤에 둔다: gap 을 같은 특정도로 다시 거는 규칙이라
+   원본(파일 끝 V5 LANDING)에서도 미디어 뒤에 있었고, 앞으로 옮기면 720px 이하에서 gap 이
+   20px 로 뒤집힌다. 순서 의존이 있는 자리다.
+
+   추상 일러스트 → 실제 프로젝트 도면으로 교체하면서 레이아웃도 바꿨다. 기존은
+   [카피 | 340px 이미지] 2열이었는데, 도면은 viewBox 1200 폭에 모노 라벨이 촘촘해 340px 로
+   줄이면 글자가 뭉개져 "설계 산출물"로 읽히지 않는다. 세로로 쌓아 전폭을 준다. */
+.ca-delivery .arch-statement {
+  grid-template-columns: 1fr;
+  gap: var(--space-xl);
+}
+
+.ca-delivery .as-shot {
+  margin: 0;
+  /* 도면 자체가 크림 캔버스를 그리므로 다크 배경(구 #0d1014)을 걷어낸다. */
+  background: var(--bg);
+  border-radius: var(--radius-lg);
+}
+
+.ca-delivery .as-shot img {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.ca-delivery .as-shot .ca-v5-cap {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+
+/* 도면 캐러셀 (2026-07-22) — 프레임(테두리·라디우스·그림자)은 .as-shot 이 이미 갖고 있다.
+   .ca-carousel 기본값을 그대로 두면 테두리가 두 겹으로 겹치므로 여기서만 걷어낸다.
+   비율은 첫 장(SVG 1200×632) 기준. 나머지 장은 object-fit:contain 이 레터박스로 맞춘다. */
+.ca-delivery .as-shot .ca-carousel {
+  border: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: none;
+  aspect-ratio: 1200 / 632;
+  background: var(--bg);
+}
+
+/* ── Sample 리본 (2026-07-22) ──
+   도면이 실제 납품물의 재현이 아니라 구조만 남긴 예시임을 표시한다.
+   좌상단 모서리 밖으로 -45° 로 눕힌 띠를 빼고, 부모(.as-shot)의 overflow:hidden 이 삼각형으로 잘라낸다.
+   그래서 이 리본은 .as-shot 의 overflow·position 에 의존한다 — 둘 중 하나를 바꾸면 함께 본다.
+   색은 Contact 다크 밴드와 같은 쌍(--panel / --panel-ink)을 쓴다 — 브라스 필 위 밝은 글자는
+   금지라(DESIGN.md §10 Don't) 밝은 텍스트를 얹으려면 어두운 바탕이어야 한다. */
+.ca-delivery .as-shot {
+  position: relative;
+}
+
+.ca-delivery .as-sample {
+  position: absolute;
+  top: 20px;
+  left: -46px;
+  width: 168px;
+  padding: 5px 0;
+  transform: rotate(-45deg);
+  background: var(--panel);
+  color: var(--panel-ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .2em;
+  text-align: center;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+/* ── 이관: FOOTER / CONTACT ── */
+/* ============================================================
+   FOOTER / CONTACT (#contact) — 마무리 CTA + 연락처
+   시안 design_handoff_landing 의 footer 이식. 시안 styles.css 엔
+   풍부한 footer CSS 가 없어 HERO 패턴(.ca-btn·.ca-flow-em·glyph)을
+   재사용해 새로 작성한다. 모든 선택자는 .ca-foot 스코프.
+   ============================================================ */
+.ca-foot {
+  padding: 0 0 24px;
+}
+
+/* footer 2열 래퍼(components/footer.py, st.container(key="ca_foot")) — 상단 구분선·여백을 폭 전체에 건다.
+   ca-foot 가 좌측 컬럼 안으로 들어가 border-top 이 반쪽만 그어지던 문제 해소. */
+/* 시안 .final{padding-bottom:110px} — 닫는 블록. 위 구분선은 앞 섹션(.ca-proof)의
+   border-bottom 이 이미 긋고 있어 여기서 border-top 을 또 그으면 선이 겹친다. */
+.ca-foot {
+  padding: var(--section-y) 0 110px;
+}
+
+/* 우측 문의 폼 카드(components.html) — 좌측 카피 상단과 눈높이 맞춤 */
+.cf-card {
+  margin-top: 6px;
+}
+
+/* Streamlit 기본 링크 스타일(파랑+밑줄) 무력화 */
+.ca-foot a {
+  text-decoration: none !important;
+}
+
+.ca-foot-cta {
+  margin-bottom: 30px;
+}
+
+/* 시안 contact 의 eyebrow 도 기본 초록이다(.eyebrow{color:var(--green)}) */
+.ca-foot-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--tone2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+.ca-foot-kicker::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* .ca-foot-cta h2 규격은 아래 "표준 섹션 제목" 공통 규칙이 소유한다(시안과 같은 39px 계열).
+   기존 52px 은 다른 섹션 제목들과 어긋나 마무리 블록만 다른 페이지처럼 보였다. */
+
+/* 시안 .contact p{max-width:48ch;margin-top:17px;color:var(--muted);font-size:14px}.
+   특이도 (0,2,0) — Streamlit 의 p{font-size:inherit} 때문에 기존 clamp 값도 안 먹고 있었다. */
+.ca-foot-cta .ca-foot-lede {
+  font-family: var(--kr);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--muted);
+  max-width: 48ch;
+  margin: 17px 0 36px;
+}
+
+.ca-foot-lede b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Footer 필기체 P.S. — hero 메모와 같은 '직접 적은' 톤 (시안 .foot-note). 문의 폼 아래 독립 블록.
+   특이도(.ca-foot .ca-foot-note = 0,2,0)로 Streamlit 기본 `.st-emotion-cache-* p{font-size:inherit}`
+   (0,1,1)를 이겨 폰트 크기가 실제로 먹게 한다. hero 는 `.ca-hero-note p`(0,1,1)로 이미 이김. */
+.ca-foot .ca-foot-note {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 30px 0 0;
+  max-width: 600px;
+  font-family: var(--pen);
+  font-weight: 400;
+  font-size: var(--pen-note-size);
+  line-height: 1.4;
+  color: var(--ink2);
+  word-break: keep-all;
+  text-wrap: pretty;
+}
+
+.ca-foot-note .ps {
+  flex: none;
+  color: var(--tone2);
+  letter-spacing: .03em;
+}
+
+.ca-foot-note .uline {
+  position: relative;
+  white-space: nowrap;
+}
+
+.ca-foot-note .uline svg {
+  position: absolute;
+  left: 0;
+  bottom: -7px;
+  width: 100%;
+  height: 8px;
+  color: var(--tone2);
+  opacity: .85;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.ca-foot-note .uline svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+/* (하단 식별 줄 .ca-foot-bottom·.ca-foot-id 는 좌측 레일 foot 로 이동 — components/rail.py) */
+
+
+/* ── 이관: V4 STREAM SECTIONS ── */
+/* ============================================================
+   V4 STREAM SECTIONS — Hero 2열·인포그래픽 / 성과 밴드 / 문제 3카드 /
+   Living Portfolio (시안 landing_v4 구조 이식 + 브랜딩전략 피드백 반영)
+   와이드 모니터 좌치우침 수정 = 스트림 콘텐츠 최대폭 + 중앙.
+   ============================================================ */
+/* 와이드 센터링 — 넓은 화면에서 콘텐츠가 과폭·좌치우침 되지 않게 캡 + 중앙.
+   캡은 **스트림 컨테이너가 아니라 각 섹션**이 갖는다 — 시안 구조(.impact 전폭 + 내부 .block 캡)를
+   따르기 위함이다. 컨테이너에 캡을 걸면 그 안의 Impact 밴드가 음수 마진으로도 컬럼 끝까지
+   못 나가 넓은 화면에서 좌우가 뜬다(실측: 1774px 에서 111px 씩).
+   전폭 밴드(.ca-metrics·.ca-delivery)는 여기서 제외하고 각자 전폭 + 내부 캡을 직접 처리한다. */
+.ca-hero,
+.ca-outcomes,
+.ca-proof,
+.ca-foot {
+  max-width: var(--stream-maxw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── 섹션 리듬·구분선 (시안 .block: padding 96px 0 + border-bottom) ──
+   시안은 섹션마다 아래 구분선을 그어 흐름을 끊는다. 배경이 바뀌는 밴드(.impact·.story)는
+   배경 자체가 구분 역할을 하므로 시안도 border:0 으로 뺀다 — 여기서도 같다. */
+.ca-hero,
+.ca-outcomes,
+.ca-proof {
+  padding: var(--section-y) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+/* Hero 만 위쪽을 좁게 — 시안 .hero{padding-top:72px} · 900px 이하 64px.
+   미디어 규칙은 반드시 이 기본 규칙 뒤에 둔다(같은 특정도라 소스 순서가 이긴다). */
+.ca-hero {
+  padding-top: 72px;
+}
+
+@media(max-width:900px) {
+  .ca-hero {
+    padding-top: 64px;
+  }}
+
+/* ── Hero 카피 블록 ──
+   2열 그리드(.ca-hero-grid)와 우측 인포그래픽은 hero.py 재구성(2026-07-21)으로 사라졌다.
+   지금은 카피 1열 + 그 아래 전폭 제품 화면(.ca-hero-shot)이다. */
+.ca-hero-copy {
+  min-width: 0;
+}
+
+/* 헤드라인 — 시안 .hero h1 값(크기·자간·행간·11.5ch 캡)을 그대로 옮긴다.
+   11.5ch 는 시안이 헤드를 3줄로 끊는 장치다. */
+.ca-hero-copy h1 {
+  font-weight: 700;
+  max-width: 11.5ch;
+  font-size: clamp(41px, 4.3vw, 67px);
+  line-height: 1.08;
+  letter-spacing: -.075em;
+  margin: 0 0 2px;
+  word-break: keep-all;
+}
+
+/* 강조 — 시안은 단색 그린(.hero h1 em{color:var(--green)}).
+   그라디언트+text-fill:transparent 를 쓰면 tone1(옅은 세이지)이 섞여 시안보다 흐려진다. */
+.ca-flow-em {
+  color: var(--tone2);
+}
+
+/* 기술 한 줄 — 전문성 복원(수집·모델링·대시보드·운영 자동화).
+   읽는 순서: h1 → 기술 태그 → CTA (리드 문장은 h1 중복이라 제거 — 2026-07-21). */
+
+/* 기술 태그 — 시안은 10px/padding 5·8 이었지만 그건 좌측 rail 안의 작은 칩 기준이었다.
+   rail 을 걷어내고 Hero 가 전폭이 되면서 h1(최대 60px) 옆에서 칩만 유독 작아 보여 키운다.
+   라디우스가 full 에서 xs 로 바뀐 것도 겹쳤다 — 알약 형태일 때는 같은 크기라도 더 커 보인다. */
+.ca-hero .ca-tech-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: var(--space-xl) 0 0;
+}
+
+.ca-hero .ca-tech-line span {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: .03em;
+  color: var(--ink2);
+  background: var(--tint-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);   /* 999px → xs : 칩 — §7 칩·태그 xs */
+  padding: var(--space-sm) var(--space-md);
+}
+
+.ca-hero .ca-cta-row {
+  margin-top: 29px;
+}
+
+/* 데이터 흐름 인포그래픽(.ca-dataflow · .cf-*)은 hero.py 재구성(2026-07-21)으로 제거됐다 —
+   같은 역할을 Delivery 의 실제 아키텍처 도면과 Provenance 도면이 맡는다. 관련 규칙(노드 절대
+   배치 · SVG 경로 · 590px 좌표 보정 · reduced-motion)도 함께 뺐다. */
+
+/* Hero 카피 폭 — 2열 전환용 1550px 미디어(`.ca-hero-copy{max-width:620px}`)는 함께 뺐다.
+   같은 속성을 더 높은 특정도로 거는 `.ca-hero .ca-hero-copy{max-width:760px}`(아래 V5 병합분)이
+   폭 구간과 무관하게 항상 이겨서, 그 620px 규칙은 이미 적용된 적이 없다. */
+.ca-hero .ca-hero-copy {
+  max-width: 760px;
+}
+
+/* 히어로 아래 대형 제품 화면(hero.py → st.container(key="ca_hero_shot")) — 카피와 붙지 않게 띄운다.
+   스트림 패딩 밖으로 흘리는(bleed) 건 포기했다: 이 블록은 Streamlit flex 컨테이너의 아이템이라
+   음수 마진은 위치만 밀고 width 명시도 flex-basis 에 진다. 마진만 남으면 이미지가 왼쪽으로 밀려
+   히어로 카피와 좌측선이 어긋난다. rail 을 걷어낸 것만으로 이미 507px → 984px 로 늘었으므로
+   스트림 콘텐츠 폭에 맞춰 카피와 같은 좌측선을 유지한다. */
+.ca-hero-shot {
+  margin-top: var(--space-xxl);
+}
+
+.ca-hero-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+}
+
+/* ── IMPACT — 성과 지표 밴드 (components/metrics.py) ──
+   시안 landing_v4 의 .impact 이식: 짙은 전폭 밴드 + 4열 구분선 그리드. "약속보다 증거" 서사를
+   단단하게 만드는 블록이라 밝은 카드가 아니라 짙은 밴드여야 한다(Codex R01 P2-2).
+   배경은 --band(먹빛) — rail 의 --panel(포레스트)과 구분된다(시안도 두 색을 다르게 쓴다).
+
+   전폭 구조: 밴드는 스트림 패딩을 음수 마진으로 되돌려 컬럼 끝까지 나가고, 자기 패딩을 다시 줘
+   내부 콘텐츠를 --stream-maxw 로 캡·중앙 정렬한다 — 결과적으로 다른 섹션과 좌우가 정확히 맞는다
+   (시안 .impact 전폭 + 내부 .block 캡과 같은 방식). 음수 마진·패딩 모두 --stream-pad 를
+   참조하므로 좁은 화면(24px)에서도 자동으로 따라온다. */
+.ca-metrics {
+  margin-inline: calc(-1 * var(--stream-pad));
+  /* 시안 .impact .block{padding-top:70px;padding-bottom:76px} — 다른 섹션(96px)보다 약간 좁다 */
+  padding: 70px var(--stream-pad) 76px;
+  background: var(--band);
+  color: var(--panel-ink);
+}
+
+/* 내부 블록 캡 — 다른 섹션(.ca-hero 등)과 같은 폭·중앙선에 맞춘다 */
+.ca-metrics > * {
+  max-width: var(--stream-maxw);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ca-metrics .impact-head {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 30px;
+}
+
+.ca-metrics .sec-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--panel-accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.ca-metrics .sec-kicker::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* Impact 제목 — 시안 .impact-head h2. 표준 섹션 제목(39px)보다 한 단 작다. */
+.ca-metrics h2 {
+  margin: 0;
+  font-weight: 700;
+  font-size: clamp(27px, 3vw, 38px);
+  line-height: 1.22;
+  letter-spacing: -.055em;
+  color: var(--panel-ink);
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+/* 시안 .impact-head p{color:#b9c9c0;font-size:14px} */
+.ca-metrics .ih-lede {
+  margin: 0;
+  font-family: var(--kr);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--panel-ink2);
+  word-break: keep-all;
+}
+
+/* 4열 구분선 그리드 — 카드가 아니라 선으로만 나눈다(시안 .impact-grid) */
+.ca-metrics .impact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--panel-line);
+  border-bottom: 1px solid var(--panel-line);
+}
+
+.ca-metrics .impact-item {
+  padding: 22px 18px;
+  border-right: 1px solid var(--panel-line);
+}
+
+.ca-metrics .impact-item:first-child {
+  padding-left: 0;
+}
+
+.ca-metrics .impact-item:last-child {
+  border-right: 0;
+  padding-right: 0;
+}
+
+.ca-metrics .m-value {
+  display: block;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.1;
+  letter-spacing: -.05em;
+  color: var(--panel-accent);
+}
+
+.ca-metrics .m-value i {
+  font-style: normal;
+  font-size: .5em;
+  font-weight: 500;
+  color: var(--panel-ink2);
+  margin-left: 3px;
+}
+
+/* 밴드 위 3단 위계 — 시안: b=민트 / span=#d2ded7(밝음) / small=#849b8e(어두움).
+   토큰으로는 accent → panel-ink → panel-ink 을 밴드색 쪽으로 섞어 한 단 낮춘다. */
+.ca-metrics .m-desc {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--kr);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--panel-ink);
+  word-break: keep-all;
+}
+
+.ca-metrics .m-sub {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--panel-ink2) 72%, var(--band));
+}
+
+/* 스택 구간 — 밴드의 좌우 패딩·음수 마진은 --stream-pad(28px) 를 참조해 자동으로 따라온다.
+   세로(70/76px)는 줄이지 않는다: 시안도 `.impact .block` 이 특정도로 `.block` 의 62px 을 이겨
+   모든 폭에서 유지된다. */
+@media(max-width:900px) {
+  .ca-metrics .impact-head {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+
+  .ca-metrics .impact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ca-metrics .impact-item:nth-child(2) {
+    border-right: 0;
+    padding-right: 0;
+  }
+
+  .ca-metrics .impact-item:nth-child(3) {
+    padding-left: 0;
+  }
+
+  .ca-metrics .impact-item:nth-child(-n+2) {
+    border-bottom: 1px solid var(--panel-line);
+  }
+}
+
+/* 시안 590px 규칙 — 1열 (Codex R01 P2-1) */
+@media(max-width:590px) {
+  .ca-metrics .impact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ca-metrics .impact-item,
+  .ca-metrics .impact-item:first-child,
+  .ca-metrics .impact-item:last-child {
+    padding: 18px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .ca-metrics .impact-item:last-child {
+    border-bottom: 0;
+  }
+}
+
+/* ── 섹션 헤딩 공통 (변화·delivery·Living Portfolio) ──
+   시안 .eyebrow 는 회색이 아니라 초록(var(--green))이고, 섹션마다 색을 바꿔 흐름을 표시한다:
+   기본 초록 / Impact 민트(.impact-head .eyebrow) / Proof 러스트(.proof-copy .kicker).
+   앞의 짧은 선은 currentColor 라 kicker 색을 그대로 따라간다. */
+.ca-outcomes .sec-kicker,
+.ca-delivery .sec-kicker,
+.ca-proof .sec-kicker {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--tone2);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 17px;
+}
+
+/* Proof 만 러스트 — 시안 .proof-copy .kicker{color:var(--rust);margin-bottom:15px} */
+.ca-proof .sec-kicker {
+  color: var(--tone5);
+  margin-bottom: 15px;
+}
+
+.ca-outcomes .sec-kicker::before,
+.ca-delivery .sec-kicker::before,
+.ca-proof .sec-kicker::before {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+
+/* ── 변화 3항목 (What changes) ──
+   시안 landing_v4 의 .section-head + .outcome-list 이식. 카드 대신 구분선 리스트로,
+   번호(68px) · 본문(1fr) · 태그(auto) 3열. 스테이지색은 --sc 로 항목마다 스왑한다. */
+/* .ca-outcomes 의 패딩·구분선은 위 "섹션 리듬·구분선" 공통 규칙이 소유한다(시안 .block). */
+
+/* 섹션 헤딩 — 좌 제목 / 우 보조 문장 (시안 .section-head).
+   sec-head·sh-lede 는 이름이 일반적이라 랜딩 스트림(.ca-stream)으로 스코프해
+   Overview 로 누수되지 않게 한다. 랜딩 내 여러 섹션이 공유한다. */
+.ca-stream .sec-head {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 30px;
+  align-items: end;
+  margin-bottom: 36px;
+}
+
+/* 헤딩 본문 — 변화·delivery 등 sec-head 를 쓰는 섹션이 공유(em 강조색만 섹션별로 다름) */
+/* 표준 섹션 제목 — 시안 `.section-head h2, .proof-copy h2, .contact h2` 한 규격을
+   What changes · Delivery · Proof · Contact 가 공유한다. 제목마다 규격이 달라지면
+   같은 페이지가 아닌 것처럼 보인다(Codex R03 P1-1: 30/34/52px 로 흩어져 있었다). */
+.ca-stream .sec-head h2,
+.ca-proof h2,
+.ca-foot-cta h2 {
+  font-weight: 700;
+  font-size: clamp(28px, 3.1vw, 39px);
+  letter-spacing: -.06em;
+  line-height: 1.18;
+  color: var(--ink);
+  margin: 0;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+
+/* 시안 .section-head p{color:var(--muted);font-size:14px} */
+.ca-stream .sh-lede {
+  margin: 0;
+  font-family: var(--kr);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--muted);
+  word-break: keep-all;
+}
+
+.ca-outcomes .outcome-list {
+  border-top: 1px solid var(--line);
+}
+
+.ca-outcomes .outcome {
+  display: grid;
+  grid-template-columns: 68px 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 25px 0;
+  border-bottom: 1px solid var(--line);
+  transition: .3s;
+  --sc: var(--tone2);
+}
+
+.ca-outcomes .outcome.s-raw {
+  --sc: var(--tone1);
+}
+
+.ca-outcomes .outcome.s-cur {
+  --sc: var(--tone2);
+}
+
+.ca-outcomes .outcome.s-mart {
+  --sc: var(--tone3);
+}
+
+.ca-outcomes .outcome:hover {
+  background: var(--surface);
+}
+
+/* 번호 — 시안 .outcome small{font:11px var(--mono)}. 색은 스테이지 램프(--sc)를 유지한다:
+   시안은 전부 초록이지만, rail·What changes 의 흐름 색 언어를 지키기로 했다(R03 P2-2 결정). */
+.ca-outcomes .oc-idx {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  color: var(--sc);
+}
+
+.ca-outcomes .oc-body h3 {
+  margin: 0;
+  font-family: var(--kr);
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -.045em;
+  color: var(--ink);
+  word-break: keep-all;
+}
+
+.ca-outcomes .oc-body p {
+  margin: 4px 0 0;
+  font-family: var(--kr);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+  word-break: keep-all;
+}
+
+/* 태그 — 시안 .outcome .tag{padding:5px 8px;background:#dfece4;color:#285c46;font:10px var(--mono)}.
+   테두리 없는 연녹색 pill 이다(기존은 테두리 칩 + 11.5px 한글이라 더 무거웠다). */
+.ca-outcomes .oc-tag {
+  padding: 5px 8px;
+  border-radius: var(--radius-xs);   /* 999px → xs : 태그 — §7 칩·태그 xs */
+  background: color-mix(in srgb, var(--tone2) 18%, transparent);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--tone4);
+  white-space: nowrap;
+}
+
+@media(max-width:720px) {
+  .ca-stream .sec-head {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .ca-outcomes .outcome {
+    grid-template-columns: 44px 1fr;
+    row-gap: 10px;
+  }
+
+  .ca-outcomes .oc-tag {
+    grid-column: 2;
+    justify-self: start;
+  }}
+
+/* ── Living Portfolio (proof) ──
+   패딩·구분선은 위 "섹션 리듬·구분선" 공통 규칙이 소유한다(시안 .block).
+   2열 비율·간격은 시안 .proof{grid-template-columns:1.05fr .95fr;gap:40px} 를 따른다. */
+.ca-proof {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;   /* 실측 수치 줄 제거 후 우측 화면에 폭을 더 준다(2026-07-22) */
+  gap: 40px;
+  align-items: center;
+}
+
+.ca-proof a {
+  text-decoration: none !important;
+}
+
+/* .ca-proof h2 규격은 위 "표준 섹션 제목" 공통 규칙이 소유한다.
+   위쪽 마진은 두지 않는다 — 간격은 kicker 의 아래 여백이 만든다(시안과 동일). */
+
+/* 시안 .proof-copy p{margin-top:17px;color:var(--muted);font-size:14px}.
+   특이도 (0,2,0) 으로 Streamlit 기본 `.st-emotion-cache-* p{font-size:inherit}` (0,1,1) 을
+   이겨야 크기가 실제로 먹는다 — 필기체 노트(.ca-hero-note p)와 같은 이유. */
+.ca-proof .proof-lede {
+  margin: 17px 0 0;
+  font-family: var(--kr);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--muted);
+  word-break: keep-all;
+}
+
+.proof-lede b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.proof-points {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 24px;
+}
+
+.proof-point {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.proof-point b {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);   /* 50% → full : 상태 도트 — §2 full 은 아바타·도트 한정 */
+  background: var(--tint-2);
+  color: var(--tone3);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.proof-point span {
+  font-family: var(--kr);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink2);
+  word-break: keep-all;
+}
+
+/* Living Portfolio 우측 CSS 목업(.proof-visual · .dash-card/bar/body/head/kpis/chart · .dk)은
+   실제 운영 화면 캡처로 교체되면서 제거됐다(proof.py 2026-07-21) — 아래 .ca-v5-stack
+   블록이 그 자리를 대신한다. */
+
+@media(max-width:860px) {
+  .ca-proof {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* ── Proof 섹션 구조 전환 (proof.py: section → st.columns, V5) ──
+   ↓ 여기부터는 파일 끝 "V5 LANDING" 패치 레이어에서 옮겨온 규칙이다. 원본 순서를 그대로 유지했고,
+   위 @media(max-width:860px) 뒤에 둬 .ca-proof-solo 가 그 미디어 규칙을 덮는 관계도 보존했다.
+
+   레이아웃은 st.columns 가 맡으므로 .ca-proof 자신의 그리드는 푼다. 클래스를 남기는 이유는
+   sec-kicker·h2·proof-lede·proof-points 스타일이 전부 .ca-proof 후손으로 정의돼 있어서다. */
+.ca-proof-solo {
+  display: block;
+  padding: 0;
+  margin: 0;
+  gap: 0;
+}
+
+/* Proof 섹션 폭·리듬 — section → st.columns 로 바꾸면서 잃은 두 규칙을 되돌린다.
+   ① max-width: 다른 섹션(.ca-hero 등)은 --stream-maxw 로 캡되는데 Proof 만 스트림 전체를 써서
+      넓은 화면일수록 혼자 늘어났다(1990px 화면에서 좌측 카피가 다른 섹션보다 왼쪽에서 시작).
+   ② padding-block: 섹션 세로 리듬(--section-y)이 없어 위 밴드와 맞붙었다. */
+.ca-proof {
+  max-width: var(--stream-maxw);
+  margin-inline: auto;
+  padding-block: var(--section-y);
+}
+
+/* 캡처 아래 캡션이 컬럼 폭을 넘지 않게 — 겹침 스택이 absolute 를 쓰므로 흐름에서 빠진다.
+   (.ca-v5-cap 기본값은 V5 LANDING 섹션에 있지만 여기가 더 특정도가 높아 폭 구간과 무관하게 이긴다) */
+.ca-proof .ca-v5-cap {
+  margin-top: var(--space-md);
+}
+
+.ca-v5-stack img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+}
+
+.ca-v5-stack .ca-v5-shot-back {
+  width: 92%;
+  margin-left: auto;         /* 뒤 장은 오른쪽 위로 */
+}
+
+.ca-v5-stack .ca-v5-shot-front {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 76%;
+  z-index: 2;
+}
+
+@media (max-width: 900px) {
+  /* 좁은 화면에선 겹침을 풀어 세로로 쌓는다 — 겹친 채 줄이면 둘 다 못 읽는다.
+     1열로 접히면 흘림(margin-right)도 거둔다 — 오른쪽으로 나가면 가로 스크롤이 생긴다. */
+  .ca-v5-stack {
+    padding-bottom: 0;
+    margin-right: 0;
+  }
+
+  .ca-v5-stack .ca-v5-shot-back,
+  .ca-v5-stack .ca-v5-shot-front {
+    position: static;
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .ca-v5-stack .ca-v5-shot-front {
+    margin-top: var(--space-md);
+  }}
+/* ── 이관: V5 LANDING ── */
+/* ============================================================
+   V5 LANDING — 스크린샷 프레임 · 다크 밴드 · 좌우 교차 (docs/DESIGN.md §8·§9)
+   랜딩의 밀도는 색·폰트가 아니라 이미지가 만든다. 이 블록은 "제품 화면을 어떻게 앉힐지"만
+   담당한다. 기존 V4 STREAM SECTIONS 와 클래스명이 겹치지 않게 ca-v5- 접두사를 쓴다.
+
+   ⚠ .ca-v5-shot / .ca-v5-band / .ca-v5-alt* 는 **현재 마크업에 아직 없다** — 랜딩 정적 HTML
+   이관 후 좌우 교차 섹션·다크 밴드에 쓸 예정이라 의도적으로 남긴다(죽은 코드 아님).
+   실제로 쓰이는 건 .ca-v5-cap(hero·proof·delivery 캡션) 하나다.
+
+   이 섹션에 있던 컴포넌트별 패치 규칙(proof 캡처 스택 · delivery 도면 · hero 화면 · 전폭 셸)은
+   각자의 원래 섹션으로 옮겼다(2026-07-21 정리).
+   ============================================================ */
+
+/* ── 스크린샷 프레임 (§9-1) ──
+   시스템의 유일한 그림자(--shadow-screenshot)가 여기에만 걸린다. 카드에는 쓰지 않는다. */
+.ca-v5-shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+}
+
+/* 다크 배경 위에 얹을 때 — 밝은 스크린샷이 살아나도록 보더를 밝은 쪽으로 뒤집는다. */
+.ca-v5-band .ca-v5-shot {
+  border-color: var(--panel-line);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .28);
+}
+
+/* ── 다크 밴드 (§8) ──
+   스트림 폭을 넘어 전폭으로 나가는 밴드. --stream-pad 만큼 음수 마진으로 되돌린다
+   (기존 Impact·Delivery 밴드와 같은 방식 — 둘은 짝이다). */
+.ca-v5-band {
+  margin-inline: calc(var(--stream-pad) * -1);
+  padding: var(--section-y) var(--stream-pad);
+  background: var(--panel);
+  color: var(--panel-ink);
+}
+
+.ca-v5-band h2,
+.ca-v5-band h3 {
+  color: var(--panel-ink);
+}
+
+.ca-v5-band p {
+  color: var(--panel-ink2);
+}
+
+/* 랜딩 전체에서 다크 밴드는 2회를 넘지 않는다(§8) — 남발하면 리듬이 아니라 얼룩이 된다.
+   3번째부터는 크림으로 되돌려 규칙을 코드로 강제한다. */
+.ca-v5-band ~ .ca-v5-band ~ .ca-v5-band {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+/* ── 좌우 교차 섹션 (§9-1) ──
+   한쪽 이미지, 반대쪽 짧은 헤드라인 + 2줄 설명 + 텍스트 링크. 홀수 섹션은 좌우를 뒤집는다. */
+.ca-v5-alt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xxxl);
+  align-items: center;
+  padding-block: var(--section-y);
+}
+
+.ca-v5-alt.is-flipped .ca-v5-alt-media {
+  order: 2;
+}
+
+.ca-v5-alt-copy h3 {
+  font-family: var(--sans);
+  font-size: var(--fs-display-3);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -.01em;
+  margin: 0 0 var(--space-md);
+}
+
+.ca-v5-alt-copy p {
+  font-size: var(--fs-body);
+  line-height: 1.65;
+  color: var(--ink2);
+  margin: 0 0 var(--space-lg);
+}
+
+/* 캡션 — 스크린샷이 무엇의 화면인지 밝힌다. 모노로 써서 "측정·시스템"의 신호를 준다(§4-4).
+   hero·proof·delivery 가 이 클래스를 쓰고, 각 섹션에서 더 높은 특정도로 여백만 덮는다. */
+.ca-v5-cap {
+  display: block;
+  margin-top: var(--space-sm);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink3);
+}
+
+.ca-v5-band .ca-v5-cap {
+  color: var(--panel-ink2);
+}
+
+@media (max-width: 900px) {
+  .ca-v5-alt {
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  .ca-v5-alt.is-flipped .ca-v5-alt-media {
+    order: 0;              /* 1열로 접히면 이미지가 항상 위 */
+  }}
+/* ── 문의 폼 ──
+   Streamlit 판에서는 이 스타일이 footer.py 의 _FORM_TEMPLATE 안 <style> 로 iframe 에 들어갔고,
+   iframe 이 부모의 CSS 변수를 못 읽어 색 토큰 12개를 문자열로 주입해야 했다(_form_palette).
+   정적에서는 폼이 페이지에 직접 있으므로 var(--*) 를 그대로 쓴다 — 주입 로직이 통째로 사라졌다.
+   태그 셀렉터(label·input·button)는 .cf-card 스코프로 한정한다. */
+.cf-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);   /* 14px → lg : 큰 카드 — §7 큰 카드 lg */
+  padding: 20px 22px;
+}
+
+.cf-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--ink2);
+}
+
+.cf-card .cf {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.cf-card .cf-row {
+  display: flex;
+  gap: 13px;
+}
+
+.cf-card .cf-row .cf-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.cf-card .cf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cf-card label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink3);
+}
+
+.cf-card input,
+.cf-card textarea {
+  width: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  border: 1px solid var(--line2);
+  border-radius: var(--radius-sm);   /* 9px → sm : 입력 — §2 sm(입력·작은 배지) */
+  padding: 10px 12px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.cf-card input::placeholder,
+.cf-card textarea::placeholder {
+  color: var(--ink3);
+}
+
+.cf-card input:focus,
+.cf-card textarea:focus {
+  outline: none;
+  border-color: var(--tone2);
+  box-shadow: 0 0 0 3px rgba(76, 146, 113, .18);
+}
+
+.cf-card textarea {
+  resize: vertical;
+  min-height: 104px;
+}
+
+.cf-card .cf-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 3px;
+}
+
+.cf-card button {
+  flex: none;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-md);   /* 9px → md : 버튼 — §7 CTA md */
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cf-card button:hover { opacity: .85; }
+.cf-card button:disabled { opacity: .55; cursor: default; }
+
+.cf-status {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--ink2);
+}
+
+.cf-status.ok { color: var(--tone3); }
+.cf-status.err { color: var(--tone5); }
+
+/* 허니팟 — 봇만 채우는 숨은 필드 */
+.cf-hp {
+  position: absolute;
+  left: -9999px;
+}
+
+/* ── 정적 셸 ──
+   Streamlit 판에서는 스트림 폭·중앙 정렬을 .st-key-ca_stream 이 맡았다. 정적에서는 main 이 직접 한다. */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+.ca-stream {
+  width: 100%;
+  /* 캡은 시안과 같이 "콘텐츠 + 좌우 패딩" 합계로 건다(1068 + 56*2 = 1180). box-sizing:border-box
+     이므로 이 값이 곧 바깥 폭이고, 안쪽 콘텐츠는 정확히 --stream-maxw(1068)가 된다.
+     --maxw(1160)를 쓰던 시절에는 콘텐츠가 1048 이라, 전폭 밴드 안쪽(1068 캡)과 좌측선이
+     10px 어긋났다 — 밴드마다 글줄 시작점이 밀려 보이던 원인. */
+  max-width: calc(var(--stream-maxw) + 2 * var(--stream-pad));
+  margin-inline: auto;
+  padding-inline: var(--stream-pad);
+}
+
+.ca-hero-shot {
+  margin: var(--space-xxl) 0 0;
+}
+
+.ca-hero-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+}
+
+/* 겹침 스택 기준점 — 이관 중 누락됐던 규칙.
+   .ca-v5-shot-front 가 position:absolute 인데 부모가 static 이면 기준점을 조상에서 찾아
+   페이지 상단으로 튀어나가 Hero 를 덮는다. 스택이 좌표계를 만들어야 한다. */
+.ca-v5-stack {
+  position: relative;
+  margin: 0;
+  padding-bottom: 30px;   /* 앞 장이 아래로 삐져나오는 만큼 자리를 비운다 */
+}
+
+/* ── 전폭 밴드 (steep 방식) ──
+   배경색이 다른 섹션은 좌우 여백 없이 화면 끝까지 나간다. Streamlit 에서는 컨테이너가 flex 아이템이라
+   음수 마진으로도 폭을 못 늘렸는데(width 가 flex-basis 에 짐), 정적에서는 100vw 한 줄이면 된다.
+   바깥은 화면 전체, 안쪽 콘텐츠는 --maxw 로 중앙 정렬 — 배경만 넓히고 글줄 길이는 그대로 둔다. */
+/* 기본(화면이 --stream-cap 보다 좁을 때) — 스트림 자체가 이미 전폭이므로, 스트림의 좌우
+   패딩만 음수 마진으로 되돌리면 화면 끝에 닿는다. 100vw 를 쓰지 않는 이유: 100vw 는 세로
+   스크롤바를 포함하는데 스트림의 100% 는 포함하지 않아, 둘을 섞으면 밴드 안쪽 좌측선이
+   스크롤바 절반만큼(≈7px) 밀린다. 여기서는 같은 기준(부모 폭)만 쓴다. */
+.ca-metrics,
+.ca-delivery {
+  margin-inline: calc(-1 * var(--stream-pad));
+  /* 되돌린 만큼 다시 패딩을 줘 안쪽 콘텐츠를 다른 섹션과 같은 좌측선에 세운다. */
+  padding-inline: var(--stream-pad);
+}
+
+/* 화면이 캡보다 넓어지면 스트림이 가운데 1180px 로 좁아지므로, 밴드는 화면 끝까지 직접 나간다.
+   이 구간에서는 스트림도 밴드도 화면 중앙 기준이라 스크롤바가 양쪽에 대칭으로 작용해 좌측선이 맞는다. */
+@media (min-width: 1180px) {
+  .ca-metrics,
+  .ca-delivery {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}
+
+.ca-metrics > *,
+.ca-delivery > * {
+  /* 밴드 안쪽 콘텐츠는 다른 섹션과 같은 좌측선에 서야 한다 — --maxw(1160)가 아니라
+     스트림 콘텐츠 폭(--stream-maxw 1068)이 기준이다. */
+  max-width: var(--stream-maxw);
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* 100vw 는 세로 스크롤바 폭을 포함하므로 그만큼 가로 스크롤이 생긴다. 페이지는 세로로만 스크롤한다. */
+body {
+  overflow-x: hidden;
+}
+
+/* ── Outcomes 좌우 교차 (.ca-v5-alt) ──
+   텍스트 3항목 리스트 → 이미지↔카피 교차 배치로 바꾸면서 붙인 마감.
+   기존 .ca-v5-alt 골격(그리드·flip·h3/p)은 위 V5 LANDING 블록이 이미 정의한다. */
+.ca-v5-alt-media {
+  margin: 0;
+}
+
+.ca-v5-alt-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+}
+
+/* 번호·태그 — 리스트에서 쓰던 .oc-idx / .oc-tag 를 교차 레이아웃에서도 그대로 쓴다. */
+.ca-v5-alt-copy .oc-idx {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  letter-spacing: .08em;
+  color: var(--ink3);
+}
+
+.ca-v5-alt-copy .oc-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xs);
+  background: var(--bg2);
+  font-size: var(--fs-caption);
+  color: var(--ink2);
+}
+
+/* 스테이지 색 — 항목 번호에 raw→curated→mart 흐름을 얹는다(리스트 시절과 같은 언어). */
+.ca-v5-alt.s-raw .oc-idx { color: var(--tone1); }
+.ca-v5-alt.s-cur .oc-idx { color: var(--tone2); }
+.ca-v5-alt.s-mart .oc-idx { color: var(--tone4); }
+
+/* 섹션 사이 구분 — 교차 항목이 연달아 오므로 위 항목과의 경계를 헤어라인으로 만든다. */
+.ca-v5-alt + .ca-v5-alt {
+  border-top: 1px solid var(--line);
+}
+
+/* ── 캐러셀 (Hero · Proof 공용) ──
+   여러 화면을 페이드로 교차한다. 한 페이지에 둘 이상 놓일 수 있어 hero 전용 이름을 쓰지 않는다. 전환 제어는 JS(landing_template.html)가 하고
+   CSS 는 상태(.is-active)에 따른 모양만 맡는다 — 사용자가 클릭·도트로 개입할 수 있어야 해서
+   @keyframes 대신 transition 을 쓴다.
+
+   object-fit 은 contain 이다. cover 로 두면 비율이 다른 화면(1.60 등)의 아래가 잘려
+   대시보드 하단 내용이 사라진다(사용자 지적: 위성 화면 밑 잘림). 대신 좌우 여백이 생기므로
+   컨테이너 배경을 표면색으로 채운다. */
+.ca-carousel {
+  position: relative;
+  aspect-ratio: 1400 / 782;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-screenshot);
+  background: var(--surface);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.ca-carousel img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+
+.ca-carousel img.is-active {
+  opacity: 1;
+}
+
+/* 도트 — 몇 장인지 알리고 직접 고르게 한다. 화면 위에 얹되 이미지를 가리지 않게 하단 중앙. */
+.ca-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  z-index: 2;
+}
+
+.ca-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--ink) 28%, transparent);
+  cursor: pointer;
+  transition: background .25s ease, transform .25s ease;
+}
+
+.ca-dot:hover {
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.ca-dot.is-active {
+  background: var(--tone2);
+  transform: scale(1.35);
+}
+
+.ca-dot:focus-visible {
+  outline: 2px solid var(--tone2);
+  outline-offset: 3px;
+}
+
+/* 움직임을 줄여달라고 한 사용자에겐 자동 전환을 멈춘다(JS 가 타이머를 걸지 않는다).
+   도트로 직접 넘기는 것은 그대로 되고, 전환도 즉시 바뀐다. */
+@media (prefers-reduced-motion: reduce) {
+  .ca-carousel img {
+    transition: none;
+  }
+}
+
+/* ── Contact 다크 밴드 (2026-07-21) ──
+   DESIGN.md §8 리듬의 마지막 마디 — 크림으로 흘러온 페이지를 다크로 닫는다.
+   밴드는 이 페이지에서 Metrics 와 여기 둘뿐이다(§8 의 2회 제한).
+   배경만 전폭으로 넓히고 안쪽 콘텐츠는 다른 섹션과 같은 좌측선을 유지한다. */
+.ca-foot {
+  /* 위쪽 .ca-foot 규칙이 max-width: --stream-maxw 로 캡을 걸어 둔다 — 풀지 않으면
+     전폭 값이 1068px 로 잘리고 마진만 먹어 밴드가 왼쪽으로 밀린다. */
+  max-width: none;
+  /* 전폭 방식은 Metrics·Delivery 밴드와 동일하다(위 "전폭 밴드" 구획 주석 참조) —
+     기본은 부모 패딩 되돌리기, 캡 이상 화면에서만 100vw. */
+  margin-inline: calc(-1 * var(--stream-pad));
+  padding-block: var(--section-y);
+  padding-inline: var(--stream-pad);
+  background: var(--band);
+  color: var(--panel-ink);
+}
+
+@media (min-width: 1180px) {
+  .ca-foot {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}
+
+.ca-foot > * {
+  max-width: var(--stream-maxw);
+  margin-inline: auto;
+}
+
+/* 다크 위에서의 글자색 — 크림 배경용 --ink 계열을 패널 계열로 뒤집는다. */
+.ca-foot .ca-foot-cta h2,
+.ca-foot .ca-foot-lede b {
+  color: var(--panel-ink);
+}
+
+.ca-foot .ca-foot-cta .ca-foot-lede,
+.ca-foot .ca-foot-note,
+.ca-foot .ca-foot-note .uline {
+  color: var(--panel-ink2);
+}
+
+.ca-foot .ca-foot-kicker,
+.ca-foot .ca-foot-note .ps {
+  color: var(--panel-accent);
+}
+
+.ca-foot .ca-foot-note .uline svg path {
+  stroke: var(--panel-accent);
+}
+
+.ca-foot .ca-flow-em {
+  color: var(--panel-accent);
+}
+
+/* 하단 식별 줄 */
+.ca-foot .ca-foot-id {
+  color: var(--panel-ink2);
+  border-top: 1px solid var(--panel-line);
+  margin-top: var(--space-xxl);
+  padding-top: var(--space-lg);
+}
+
+.ca-foot .ca-foot-id b {
+  color: var(--panel-ink);
+}
+
+/* 문의 폼은 흰 카드로 남긴다 — 다크 위에서 입력 영역이 또렷하게 떠 보이고,
+   폼 내부 색 토큰(--ink/--bg)을 그대로 쓸 수 있어 규칙이 갈라지지 않는다. */
+.ca-foot .cf-card {
+  background: var(--surface);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.ca-foot .cf-card .cf-status {
+  color: var(--ink2);
+}
+
+/* 밴드 전환 후 정렬 보정 — 기존 규칙이 .ca-foot > * 보다 특정도가 높아 덮이는 두 곳. */
+
+/* P.S. — 기존 `.ca-foot .ca-foot-note { margin: 30px 0 0 }` 가 margin-inline:auto 를 덮어
+   600px 박스가 화면 왼쪽 끝에 붙었다. 컨테이너는 스트림 폭으로 두고 글줄만 600px 로 제한한다. */
+.ca-foot .ca-foot-note {
+  max-width: var(--stream-maxw);
+  margin-inline: auto;
+}
+
+.ca-foot .ca-foot-note > span:last-of-type {
+  max-width: 600px;
+}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Halo">
+  <!-- 상단 nav 브랜드 글리프(.ca-brand .glyph)와 같은 형태 — 라운드 사각형에 그라데이션을 깔고
+       안쪽을 크림 배경색으로 파낸 프레임. 값은 landing/styles.css 의 --tone1/2/3·--bg 와 일치한다.
+       탭에서 16px 로 줄어도 형태가 남도록 안쪽 여백을 글리프(22px 기준 5px)보다 조금 넓게 잡았다. -->
+  <defs>
+    <linearGradient id="halo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8fbfa3"/>
+      <stop offset="0.55" stop-color="#4c9271"/>
+      <stop offset="1" stop-color="#3a7058"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="30" height="30" rx="8" fill="url(#halo)"/>
+  <rect x="9" y="9" width="14" height="14" rx="4" fill="#f7f6f0"/>
+</svg>
