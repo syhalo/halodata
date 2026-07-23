@@ -16,12 +16,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Halo · 김소율 — Data Analytics Engineer</title>
+<title>Halo · 김소율 — Data &amp; BI Engineer</title>
 <meta name="description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 데이터 수집·모델링·BI 대시보드·운영 자동화를 한 흐름으로 설계하는 데이터 분석가/엔지니어 포트폴리오.">
 <link rel="canonical" href="https://syhalo.github.io/halodata">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Halo · 김소율 — Data Analytics Engineer">
+<meta property="og:title" content="Halo · 김소율 — Data &amp; BI Engineer">
 <meta property="og:description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 수집부터 운영까지 한 흐름으로 설계합니다.">
 <meta property="og:image" content="https://syhalo.github.io/halodata/assets/screens/halo-overview.webp">
 <meta property="og:url" content="https://syhalo.github.io/halodata">
@@ -41,7 +41,7 @@
   <div class="bar">
     <a class="ca-brand" href="#top">
       <span class="glyph"></span> Halo
-      <span class="role">Data Analytics Engineer</span>
+      <span class="role">Data &amp; BI Engineer</span>
     </a>
     <div class="ca-links">
       <a href="https://www.linkedin.com/in/soyoul-kim-9b648316b" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
@@ -60,12 +60,14 @@
 <!-- ── HERO — 헤드라인 + CTA + 전폭 제품 화면 ── -->
 <header class="ca-hero" id="top">
   <div class="ca-hero-copy">
-    <span class="ca-eyebrow">Data Analytics Engineer · 김소율</span>
+    <span class="ca-eyebrow">Data &amp; BI Engineer · 김소율</span>
     <h1>흩어진 정보를,<br><span class="ca-flow-em">누구나 바로 보는</span><br>하나의 화면으로.</h1>
     <p class="ca-tech-line"><span>데이터 수집</span><span>모델링</span><span>BI 대시보드</span><span>운영 자동화</span></p>
+    <!-- Primary = 상담(#contact) — 방문자를 대시보드 구경보다 '이야기 시작'으로 먼저 이끈다(사용자 결정).
+         Live Dashboard 는 보조(고스트)로 내렸지만 히어로 캐러셀·Proof 섹션이 실제 화면 근거를 계속 든다. -->
     <div class="ca-cta-row">
-      <a class="ca-btn ca-btn-primary" href="https://halodata.streamlit.app">Live Dashboard 보기 <span class="ar">↗</span></a>
-      <a class="ca-btn ca-btn-ghost" href="#contact">데이터 고민 이야기하기 <span class="ar">↓</span></a>
+      <a class="ca-btn ca-btn-primary" href="#contact">데이터 고민 이야기하기 <span class="ar">↓</span></a>
+      <a class="ca-btn ca-btn-ghost" href="https://halodata.streamlit.app">Live Dashboard 보기 <span class="ar">↗</span></a>
     </div>
   </div>
   <!-- 캐러셀 — 자체 대시보드와 납품 화면을 번갈아 보여 "무엇을 만드는 사람인지"를 첫 화면에서 전달한다.
@@ -293,11 +295,17 @@
   <div class="cf-card" id="cf-card">
     <div class="cf-head">✉ 이메일로 문의</div>
     <form class="cf" id="cf">
+      <!-- 회신 경로 — 이메일이나 연락처 중 하나는 반드시 받는다(둘 다 비면 제출이 막힌다). 회신할
+           방법이 없는 문의는 접수돼도 답을 드릴 수 없기 때문이다(사용자 결정: 연락처 필드 추가). -->
+      <div class="cf-row">
+        <div class="cf-field"><label for="cf-email">회신받을 이메일</label><input id="cf-email" name="email" type="email" placeholder="you@company.com"></div>
+        <div class="cf-field"><label for="cf-contact">연락처</label><input id="cf-contact" name="contact" placeholder="전화·카카오톡 등"></div>
+      </div>
+      <p class="cf-hint">이메일이나 연락처 중 <b>하나는 꼭</b> 남겨 주세요 — 회신드릴 방법이 필요해요.</p>
       <div class="cf-row">
         <div class="cf-field"><label for="cf-name">성함 / 회사</label><input id="cf-name" name="name" placeholder="선택 입력"></div>
-        <div class="cf-field"><label for="cf-email">회신받을 이메일</label><input id="cf-email" name="email" type="email" placeholder="선택 입력"></div>
+        <div class="cf-field"><label for="cf-subject">제목</label><input id="cf-subject" name="subject" placeholder="어떤 일로 연락 주셨나요?"></div>
       </div>
-      <div class="cf-field"><label for="cf-subject">제목</label><input id="cf-subject" name="subject" placeholder="어떤 일로 연락 주셨나요?"></div>
       <div class="cf-field"><label for="cf-message">내용</label><textarea id="cf-message" name="message" placeholder="데이터 때문에 막막한 순간, 그 얘기부터 편하게 적어주세요."></textarea></div>
       <input type="checkbox" name="botcheck" class="cf-hp" tabindex="-1" autocomplete="off">
       <div class="cf-actions">
@@ -410,14 +418,18 @@
       if (data.botcheck) return;                       // 허니팟 — 봇이면 조용히 중단
       var message = (data.message || '').trim();
       if (!message) { box.className = 'cf-status err'; box.textContent = '내용을 입력해 주세요.'; return; }
-      var sign = [data.name, data.email].map(function (s) { return (s || '').trim(); }).filter(Boolean);
+      var email = (data.email || '').trim(), contact = (data.contact || '').trim();
+      if (!email && !contact) {                        // 회신 경로가 없으면 접수돼도 답을 드릴 수 없다
+        box.className = 'cf-status err'; box.textContent = '회신받을 이메일이나 연락처 중 하나는 남겨 주세요.'; return;
+      }
+      var sign = [(data.name || '').trim(), email, contact].filter(Boolean);
       var payload = {
         access_key: ACCESS_KEY,
         subject: '[포트폴리오 문의] ' + ((data.subject || '').trim() || '데이터 협업 문의'),
         from_name: (data.name || '').trim() || '포트폴리오 방문자',
         message: message + (sign.length ? '\n\n— ' + sign.join(' · ') : '')
       };
-      if ((data.email || '').trim()) payload.email = data.email.trim();   // Web3Forms 는 email 을 회신 주소로 사용
+      if (email) payload.email = email;   // Web3Forms 는 email 을 회신 주소로 사용(연락처만 있으면 서명에만 담긴다)
       btn.disabled = true; btn.textContent = '보내는 중…';
       try {
         var res = await fetch('https://api.web3forms.com/submit', {

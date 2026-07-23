@@ -427,7 +427,7 @@ body {
   transform: translateX(5px);
 }
 
-/* ghost 버튼 — Hero 보조 CTA(Contact) */
+/* ghost 버튼 — Hero 보조 CTA(Live Dashboard). Primary 를 상담(#contact)으로 올리며 대시보드를 이리로 내렸다. */
 .ca-btn.ca-btn-ghost {
   background: transparent;
   color: var(--ink);
@@ -1589,6 +1589,19 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* 회신 경로 힌트 — 이메일·연락처 행 바로 아래. "둘 중 하나는 꼭"을 조용히 안내한다. */
+.cf-card .cf-hint {
+  margin: -3px 0 1px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink3);
+}
+
+.cf-card .cf-hint b {
+  font-weight: 600;
+  color: var(--ink2);
 }
 
 .cf-card label {
