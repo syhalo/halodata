@@ -20,33 +20,33 @@
   마크업은 app/components/*.py 의 HTML 을 그대로 옮긴 것이다. 클래스명을 바꾸지 않았으므로
   기존 랜딩 CSS 가 그대로 먹는다(핸드오프 실측: 랜딩 CSS 의 81%는 Streamlit 비종속).
 -->
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Halo · 김소율 — Data &amp; BI Engineer</title>
-<meta name="description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 데이터 수집·모델링·BI 대시보드·운영 자동화를 한 흐름으로 설계하는 데이터 분석가/엔지니어 포트폴리오.">
-<link rel="canonical" href="https://syhalo.github.io/halodata/">
+<title>Halo · Soyoul Kim — Data &amp; BI Engineer</title>
+<meta name="description" content="Turning scattered information into one screen anyone can read. Portfolio of a data analyst and engineer who designs collection, modeling, BI dashboards, and operational automation as a single flow.">
+<link rel="canonical" href="https://syhalo.github.io/halodata/en/">
 <link rel="alternate" hreflang="ko" href="https://syhalo.github.io/halodata/">
 <link rel="alternate" hreflang="en" href="https://syhalo.github.io/halodata/en/">
 <link rel="alternate" hreflang="x-default" href="https://syhalo.github.io/halodata/">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Halo · 김소율 — Data &amp; BI Engineer">
-<meta property="og:description" content="흩어진 정보를 누구나 바로 보는 하나의 화면으로. 수집부터 운영까지 한 흐름으로 설계합니다.">
+<meta property="og:title" content="Halo · Soyoul Kim — Data &amp; BI Engineer">
+<meta property="og:description" content="Turning scattered information into one screen anyone can read. Designed as a single flow, from collection through operations.">
 <meta property="og:image" content="https://syhalo.github.io/halodata/assets/screens/halo-overview.webp">
-<meta property="og:url" content="https://syhalo.github.io/halodata/">
-<meta property="og:locale" content="ko_KR">
-<meta property="og:locale:alternate" content="en_US">
+<meta property="og:url" content="https://syhalo.github.io/halodata/en/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#15231f">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="styles.css">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "김소율(서로)", "jobTitle": "Data \u0026 BI Engineer", "description": "흩어진 정보를 누구나 바로 보는 하나의 화면으로. 수집부터 운영까지 한 흐름으로 설계합니다.", "inLanguage": "ko", "url": "https://syhalo.github.io/halodata/"}</script>
+<link rel="stylesheet" href="../styles.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Soyoul Kim (Seoro)", "jobTitle": "Data \u0026 BI Engineer", "description": "Turning scattered information into one screen anyone can read. Designed as a single flow, from collection through operations.", "inLanguage": "en", "url": "https://syhalo.github.io/halodata/en/"}</script>
 </head>
 <body>
 
@@ -60,11 +60,11 @@
     <div class="ca-links">
       <!-- 언어 토글 — 런타임 JS 로 문구를 바꾸지 않고 두 정적 페이지 사이를 실제 링크로 이동한다.
            현재 언어 항목은 aria-current="page" 로 표시하고 링크로 두지 않는다. -->
-      <div class="ca-lang" role="group" aria-label="언어 선택"><span class="ca-lang-on" lang="ko" aria-current="page">KO</span><a class="ca-lang-link" href="en/" lang="en" hreflang="en" title="View in English">EN</a></div>
+      <div class="ca-lang" role="group" aria-label="Select language"><a class="ca-lang-link" href="../" lang="ko" hreflang="ko" title="한국어로 보기">KO</a><span class="ca-lang-on" lang="en" aria-current="page">EN</span></div>
       <a href="https://www.linkedin.com/in/soyoul-kim-9b648316b" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
       <!-- 이메일 복사 버튼 — 클릭하면 clipboard 로 복사, "복사됨" 피드백. mailto 대신 복사인 이유:
            방문자 대부분이 웹메일을 쓰므로 mailto 는 빈 데스크톱 메일앱을 여는 헛클릭이 되기 쉽다. -->
-      <button class="ca-mail" type="button" data-mail="syoul.halo@gmail.com" aria-label="이메일 주소 복사">
+      <button class="ca-mail" type="button" data-mail="syoul.halo@gmail.com" aria-label="Copy email address">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
         <span class="ca-mail-text">syoul.halo@gmail.com</span>
       </button>
@@ -81,15 +81,15 @@
 <!-- ── HERO — 헤드라인 + CTA + 전폭 제품 화면 ── -->
 <header class="ca-hero" id="top">
   <div class="ca-hero-copy">
-    <span class="ca-eyebrow">Data &amp; BI Engineer · 김소율</span>
-    <h1>흩어진 정보를,<br><span class="ca-flow-em">누구나 바로 보는</span> 하나의 화면으로.</h1>
+    <span class="ca-eyebrow">Data &amp; BI Engineer · Soyoul Kim</span>
+    <h1>Scattered information,<br><span class="ca-flow-em">into one screen</span> anyone can read.</h1>
     <div class="ca-hero-actions">
-      <p class="ca-tech-line"><span>데이터 수집</span><span>모델링</span><span>BI 대시보드</span><span>운영 자동화</span></p>
+      <p class="ca-tech-line"><span>Data collection</span><span>Modeling</span><span>BI dashboards</span><span>Operational automation</span></p>
       <!-- Primary = 상담(#contact) — 방문자를 대시보드 구경보다 '이야기 시작'으로 먼저 이끈다(사용자 결정).
            Live Dashboard 는 보조(고스트)로 내렸지만 히어로 캐러셀·Proof 섹션이 실제 화면 근거를 계속 든다. -->
       <div class="ca-cta-row">
-        <a class="ca-btn ca-btn-primary" href="#contact">데이터 고민 이야기하기 <span class="ar">↓</span></a>
-        <a class="ca-btn ca-btn-ghost" href="https://halodata.streamlit.app?lang=ko">Live Dashboard 보기 <span class="ar">↗</span></a>
+        <a class="ca-btn ca-btn-primary" href="#contact">Talk through your data problem <span class="ar">↓</span></a>
+        <a class="ca-btn ca-btn-ghost" href="https://halodata.streamlit.app?lang=en">See the live dashboard <span class="ar">↗</span></a>
       </div>
     </div>
   </div>
@@ -99,39 +99,39 @@
        접근성: prefers-reduced-motion 이면 자동 전환을 하지 않고 수동 조작만 남는다. -->
   <figure class="ca-hero-shot">
     <div class="ca-carousel" data-carousel>
-      <img class="is-active fit-stretch-x" src="assets/screens/halo-overview.webp" data-cap="Career Overview · 직접 운영 중인 커리어 대시보드" alt="직접 운영 중인 커리어 대시보드 Overview 화면 — 프로젝트 수·경력·빌드 활동·역량 분포 차트" loading="eager" width="1400" height="737">
-      <img class="fit-crop-bottom" src="assets/screens/screen-11.webp" data-cap="조직 인원 추이 · 월별 인건비·입퇴사 대시보드" alt="조직 인원 추이를 꺾은선·막대로 보여주는 운영 대시보드 — 수치는 가림 처리" loading="eager" width="1917" height="1073">
-      <img class="fit-stretch-x" src="assets/screens/screen-15.webp" data-cap="글로벌 매출 분포 · 지도·랭킹 뷰 (로드쇼 데모 데이터)" alt="세계 지도 위에 매출 규모를 버블로 얹고 기업별 순위를 막대로 정렬한 대시보드 — 로드쇼 발표용 데모 데이터" loading="lazy" width="1029" height="402">
-      <img class="fit-stretch-x" src="assets/screens/screen-04.webp" data-cap="프로젝트·업무 현황 · 관계 히트맵" alt="프로젝트와 업무 개수를 막대·히트맵 그리드로 보여주는 현황 대시보드 — 수치는 가림 처리" loading="lazy" width="1915" height="1243">
-      <img class="fit-stretch-x" src="assets/screens/screen-19.webp" data-cap="위성 영상 분석 · 멀티스펙트럼 타일 뷰" alt="위성 멀티스펙트럼 영상을 타일로 배치한 분석 화면" loading="lazy" width="839" height="525">
-      <img class="fit-crop-bottom" src="assets/screens/screen-14.webp" data-cap="HR 현황 · 인원·연봉·직급 분포" alt="인원·평균 연봉·직급·세대 분포를 도넛·막대로 보여주는 HR 대시보드 — 수치는 가림 처리" loading="lazy" width="1904" height="1076">
-      <img class="fit-width-natural" src="assets/screens/screen-16.webp" data-cap="산업별 운영 대시보드 · 통신 · 제조 · 모빌리티 · 환경" alt="여러 산업 도메인의 대시보드 화면 모음" loading="lazy" width="1329" height="535">
-      <img src="assets/screens/screen-18.webp" data-cap="위성 영상 분류 · 토지피복 false-color" alt="위성 영상을 토지피복 false-color 로 분류하고 조건 필터로 조회하는 지오공간 분석 화면" loading="lazy" width="924" height="441">
-      <img class="fit-stretch-x" src="assets/screens/screen-17.webp" data-cap="센서 시계열 · 설비 모니터링 화면" alt="센서 시계열 데이터를 다중 패널로 보여주는 모니터링 화면" loading="lazy" width="1292" height="525">
-      <img class="fit-stretch-x" src="assets/screens/screen-05.webp" data-cap="예산 변경 현황 · 현장별 집계" alt="현장별 예산 변경 건수·금액을 표로 집계한 대시보드 — 수치는 가림 처리" loading="lazy" width="1921" height="1181">
+      <img class="is-active fit-stretch-x" src="../assets/screens/halo-overview.webp" data-cap="Career Overview · the career dashboard I run myself" alt="Overview screen of the career dashboard I operate — project counts, experience, build activity, and capability distribution charts" loading="eager" width="1400" height="737">
+      <img class="fit-crop-bottom" src="../assets/screens/screen-11.webp" data-cap="Headcount trend · monthly payroll and joiner/leaver dashboard" alt="Operations dashboard showing headcount trends as lines and bars — figures are masked" loading="eager" width="1917" height="1073">
+      <img class="fit-stretch-x" src="../assets/screens/screen-15.webp" data-cap="Global revenue distribution · map and ranking view (roadshow demo data)" alt="Dashboard placing revenue volume as bubbles on a world map with sample company rankings sorted as bars — roadshow demo data" loading="lazy" width="1029" height="402">
+      <img class="fit-stretch-x" src="../assets/screens/screen-04.webp" data-cap="Project and task status · relationship heatmap" alt="Status dashboard showing project and task counts as bars and a heatmap grid — figures are masked" loading="lazy" width="1915" height="1243">
+      <img class="fit-stretch-x" src="../assets/screens/screen-19.webp" data-cap="Satellite imagery analysis · multispectral tile view" alt="Analysis screen arranging multispectral satellite imagery as tiles" loading="lazy" width="839" height="525">
+      <img class="fit-crop-bottom" src="../assets/screens/screen-14.webp" data-cap="HR status · headcount, salary, and job level distribution" alt="HR dashboard showing headcount, average salary, job level, and generation distribution as donuts and bars — figures are masked" loading="lazy" width="1904" height="1076">
+      <img class="fit-width-natural" src="../assets/screens/screen-16.webp" data-cap="Operations dashboards by industry · telecom · manufacturing · mobility · environment" alt="Collection of dashboard screens across several industry domains" loading="lazy" width="1329" height="535">
+      <img src="../assets/screens/screen-18.webp" data-cap="Satellite image classification · land cover false-color" alt="Geospatial analysis screen classifying satellite imagery as land cover false-color with conditional filters" loading="lazy" width="924" height="441">
+      <img class="fit-stretch-x" src="../assets/screens/screen-17.webp" data-cap="Sensor time series · equipment monitoring screen" alt="Monitoring screen showing sensor time series across multiple panels" loading="lazy" width="1292" height="525">
+      <img class="fit-stretch-x" src="../assets/screens/screen-05.webp" data-cap="Budget change status · aggregated by site" alt="Dashboard tabulating budget change counts and amounts by site — figures are masked" loading="lazy" width="1921" height="1181">
     </div>
-    <figcaption class="ca-v5-cap" data-carousel-caption>Career Overview · 직접 운영 중인 커리어 대시보드</figcaption>
+    <figcaption class="ca-v5-cap" data-carousel-caption>Career Overview · the career dashboard I run myself</figcaption>
   </figure>
 </header>
 
 <!-- ── IMPACT — 성과 지표 밴드 (다크). 값은 mart 파생 ── -->
-<section class="ca-metrics" id="impact" aria-label="주요 지표">
+<section class="ca-metrics" id="impact" aria-label="Key metrics">
   <div class="impact-head">
     <div>
       <div class="sec-kicker">Proof, not promise</div>
-      <h2>여러 기업의 데이터 시스템을 구축하며,<br>정보가 실제 업무에서 쓰이는 구조를 만들어왔습니다.</h2>
+      <h2>Building data systems across several companies,<br>I have shaped structures where information is actually used at work.</h2>
     </div>
-    <p class="ih-lede">아래 수치는 프로젝트 기록과 실측 결과에서 가져왔습니다.</p>
+    <p class="ih-lede">The figures below come from project records and measured results.</p>
   </div>
   <div class="impact-grid">
     <article class="impact-item">
       <b class="m-value">17</b>
-      <span class="m-desc">구조화된 프로젝트 기록</span>
-      <small class="m-sub">완료 12 · 운영중 3 · 진행중 2</small>
+      <span class="m-desc">Structured project records</span>
+      <small class="m-sub">Delivered 12 · Operating 3 · In progress 2</small>
     </article>
     <article class="impact-item">
-      <b class="m-value">7<i>년+</i></b>
-      <span class="m-desc">데이터·공간데이터 직군 누적</span>
+      <b class="m-value">7<i>yrs+</i></b>
+      <span class="m-desc">Cumulative in data &amp; geospatial roles</span>
       <small class="m-sub">Career total</small>
     </article>
     <!-- ③·④ 는 mart 의 구조화 필드가 아니라 projects[].body 서술 문장에서 가져온 실측치라
@@ -139,14 +139,14 @@
          ③ 출처: 판매 대시보드 자동화 — "약 7일 걸리던 수작업 보고서 반영을 자동 처리 1시간(검수 포함 1일 이내)으로 단축"
          ④ 출처: raw 메타데이터 관리 AI Agent — 자연어 명령 1회로 224개 테이블 생성, 44초 -->
     <article class="impact-item">
-      <b class="m-value"><i>7일 → </i>1시간</b>
-      <span class="m-desc">자동 처리</span>
-      <small class="m-sub">검수 포함 · 1일 이내</small>
+      <b class="m-value"><i>7 days → </i>1 hour</b>
+      <span class="m-desc">Automated processing</span>
+      <small class="m-sub">Within a day, review included</small>
     </article>
     <article class="impact-item impact-flag">
-      <b class="m-value">224<i>개 · 44초</i></b>
-      <span class="m-desc">테이블 일괄 생성 실측</span>
-      <small class="m-sub">자연어 명령 한 번으로</small>
+      <b class="m-value">224<i> tables · 44s</i></b>
+      <span class="m-desc">Measured bulk table creation</span>
+      <small class="m-sub">From a single natural-language command</small>
     </article>
   </div>
 </section>
@@ -161,48 +161,48 @@
      방식은 두 가지가 더 걸렸다 — 570px 로 줄면 본문 글자가 전부 뭉개지고, 마스킹한 자국이
      "보여줄 수 없는 것"이라는 신호가 되어 증거력을 깎았다(§9-3).
      실제 화면 근거는 히어로·Proof 섹션이 계속 들고 있다. -->
-<section class="ca-outcomes" id="outcomes" aria-label="데이터가 만드는 변화">
+<section class="ca-outcomes" id="outcomes" aria-label="What data changes">
   <div class="sec-head">
     <div>
       <div class="sec-kicker">What changes</div>
-      <h2>잘 정리한 데이터 환경이 바꾸는 것은<br>화면이 아니라 업무입니다.</h2>
+      <h2>A well-organized data environment changes<br>the work itself, not just the screen.</h2>
     </div>
-    <p class="sh-lede">대시보드보다 중요한 것은, 그 이후의 업무입니다.</p>
+    <p class="sh-lede">What matters more than the dashboard is the work that follows it.</p>
   </div>
 
   <article class="ca-v5-alt s-raw">
     <figure class="ca-v5-alt-media">
-      <img src="assets/screens/ai_img_whatchange_01.webp" alt="흩어져 있던 CSV·PDF·데이터베이스·API 자료가 한 줄기로 모여 노트북 한 화면에서 확인되는 장면을 그린 일러스트" loading="eager" width="1700" height="925">
+      <img src="../assets/screens/ai_img_whatchange_01.webp" alt="Illustration of scattered CSV, PDF, database, and API sources converging into a single stream reviewed on one laptop screen" loading="eager" width="1700" height="925">
     </figure>
     <div class="ca-v5-alt-copy">
       <small class="oc-idx">01</small>
-      <h3>찾는 시간은 줄이고, 판단하는 시간은 늘립니다.</h3>
-      <p>흩어진 데이터와 문서를 한곳에 연결해, 필요한 정보를 빠르게 확인할 수 있게 합니다.</p>
-      <span class="oc-tag">정보 접근</span>
+      <h3>Less time searching, more time deciding.</h3>
+      <p>Connecting scattered data and documents in one place, so the information you need is quick to confirm.</p>
+      <span class="oc-tag">Information access</span>
     </div>
   </article>
 
   <article class="ca-v5-alt is-flipped s-cur">
     <figure class="ca-v5-alt-media">
-      <img src="assets/screens/ai_img_whatchange_02.webp" alt="서로 다른 화면을 보며 갸웃하던 사람들이 표준 정의 문서를 기준으로 삼은 뒤 같은 화면을 보고 수긍하는 장면을 그린 일러스트" loading="eager" width="2816" height="1536">
+      <img src="../assets/screens/ai_img_whatchange_02.webp" alt="Illustration of people puzzled by different screens agreeing on one view after adopting a standard definition document" loading="eager" width="2816" height="1536">
     </figure>
     <div class="ca-v5-alt-copy">
       <small class="oc-idx">02</small>
-      <h3>같은 숫자를 두고 다시 논쟁하지 않게 합니다.</h3>
-      <p>지표의 의미와 산정 기준을 통일해, 누가 보더라도 같은 답을 얻을 수 있게 합니다.</p>
-      <span class="oc-tag">기준 통일</span>
+      <h3>No more debating the same number twice.</h3>
+      <p>Aligning what each metric means and how it is calculated, so anyone reading it arrives at the same answer.</p>
+      <span class="oc-tag">Shared definitions</span>
     </div>
   </article>
 
   <article class="ca-v5-alt s-mart">
     <figure class="ca-v5-alt-media">
-      <img src="assets/screens/ai_img_whatchange_03.webp" alt="방금 갱신된 경영 대시보드를 함께 보며 다음 실행 계획을 결정하는 팀 회의 장면을 그린 일러스트" loading="eager" width="1536" height="1024">
+      <img src="../assets/screens/ai_img_whatchange_03.webp" alt="Illustration of a team meeting reviewing a freshly refreshed executive dashboard and deciding the next plan" loading="eager" width="1536" height="1024">
     </figure>
     <div class="ca-v5-alt-copy">
       <small class="oc-idx">03</small>
-      <h3>보고서를 실행의 시작으로 만듭니다.</h3>
-      <p>역할에 맞는 화면과 자동 갱신으로, 숫자 확인이 다음 판단과 행동으로 이어지게 합니다.</p>
-      <span class="oc-tag">의사결정</span>
+      <h3>Reports become the start of action.</h3>
+      <p>Role-fit screens and automatic refresh, so checking a number leads into the next judgment and action.</p>
+      <span class="oc-tag">Decision making</span>
     </div>
   </article>
 </section>
@@ -223,35 +223,35 @@
   <div class="sec-head">
     <div>
       <div class="sec-kicker">End-to-end delivery</div>
-      <h2>수집부터 운영까지,<br>끊기지 않는 흐름을 만듭니다.</h2>
+      <h2>From collection through operations,<br>an unbroken flow.</h2>
     </div>
-    <p class="sh-lede">만드는 데서 나아가, 운영까지 이어지는 구조를 함께 설계합니다.</p>
+    <p class="sh-lede">Beyond building it, I design the structure that keeps it running with you.</p>
   </div>
 
   <div class="story-grid">
     <article class="story-card s-raw">
       <span class="story-icon"><svg><use href="#dl-connect"/></svg></span>
       <small>01 · CONNECT</small>
-      <h3>데이터를 연결합니다</h3>
-      <p>DB · 문서 · API를 안정적인 수집 흐름으로 연결합니다.</p>
+      <h3>Connect the data</h3>
+      <p>Bringing databases, documents, and APIs into a dependable collection flow.</p>
     </article>
     <article class="story-card s-cur">
       <span class="story-icon"><svg><use href="#dl-model"/></svg></span>
       <small>02 · MODEL</small>
-      <h3>기준을 맞춥니다</h3>
-      <p>지표와 관계를 모델링해 같은 질문에 같은 답을 만듭니다.</p>
+      <h3>Align the definitions</h3>
+      <p>Modeling metrics and relationships so the same question returns the same answer.</p>
     </article>
     <article class="story-card s-mart">
       <span class="story-icon"><svg><use href="#dl-operate"/></svg></span>
       <small>03 · OPERATE</small>
-      <h3>업무를 지원합니다</h3>
-      <p>BI 화면 · 자동 갱신 · 인계까지 실제 사용에 맞춰 운영합니다.</p>
+      <h3>Support the work</h3>
+      <p>BI screens, automatic refresh, and handover — operated around how it is actually used.</p>
     </article>
   </div>
 
   <div class="arch-statement">
     <div class="as-copy">
-      <p class="as-lead">데이터를 수집하고, 정리하고, 필요한 사람에게 전달하는 <b>흐름</b>을 설계합니다. 새로운 데이터가 들어와도 같은 방식으로 반복되고, 사람이 믿고 사용할 수 있으며 <b>분석과 AI에도 활용할 수 있는 시스템</b>을 만드는 것이 목표입니다.</p>
+      <p class="as-lead">I design the <b>flow</b> that collects data, organizes it, and delivers it to the people who need it. The goal is a system that repeats the same way as new data arrives, that people can trust in daily use, and that <b>analytics and AI can build on</b> as well.</p>
     </div>
     <figure class="as-shot">
       <!-- 도면 3장을 같은 칸에서 돌린다(Hero·Proof 와 같은 캐러셀 컴포넌트).
@@ -260,13 +260,13 @@
            SVG 는 파일에 width/height 가 없어(반응형) <img> 로 쓰면 높이가 0 이 되므로
            viewBox 비율(1200×632)을 속성으로 알려준다. -->
       <div class="ca-carousel as-carousel" data-carousel>
-        <img class="is-active" src="assets/arch-quicksight-automation.svg" data-cap="Pipeline · 수집에서 리포트 회수까지" alt="업로드된 파일이 수집 계층을 거쳐 대시보드로 이어지고, 생성된 리포트가 다시 사용자에게 회수되는 파이프라인 도면" loading="eager" width="1200" height="632">
-        <img src="assets/arch-metadata-ingestion.webp" data-cap="Metadata-driven ingestion · 메타가 적재를 구동" alt="소스 DB와 파일이 메타 테이블과 오케스트레이터를 거쳐 자동으로 적재되고 브론즈·실버·골드 계층으로 승격되는 아키텍처 도면" loading="eager" width="2400" height="1280">
-        <img src="assets/arch-collab-medallion.webp" data-cap="Collab data · raw → stage → mart → 팀 화면" alt="협업 도구 API와 시트가 매일 도는 수집 잡을 거쳐 raw·stage·mart 세 계층으로 정리되고 팀 화면으로 이어지는 손그림 도면" loading="eager" width="2400" height="1280">
+        <img class="is-active" src="../assets/arch-quicksight-automation.svg" data-cap="Pipeline · from collection to report return" alt="Pipeline diagram where uploaded files pass through a collection layer into dashboards, and generated reports return to the user" loading="eager" width="1200" height="632">
+        <img src="../assets/arch-metadata-ingestion.webp" data-cap="Metadata-driven ingestion · metadata drives the load" alt="Architecture diagram where source databases and files load automatically through metadata tables and an orchestrator, then promote across bronze, silver, and gold layers" loading="eager" width="2400" height="1280">
+        <img src="../assets/arch-collab-medallion.webp" data-cap="Collab data · raw → stage → mart → team screens" alt="Hand-drawn diagram where collaboration-tool APIs and sheets pass through a daily collection job into raw, stage, and mart layers and on to team screens" loading="eager" width="2400" height="1280">
       </div>
       <!-- 실제 납품 도면 그대로가 아니라 구조만 남긴 예시임을 표시한다. -->
       <span class="as-sample" aria-hidden="true">Sample</span>
-      <figcaption class="ca-v5-cap" data-carousel-caption>Pipeline · 수집에서 리포트 회수까지</figcaption>
+      <figcaption class="ca-v5-cap" data-carousel-caption>Pipeline · from collection to report return</figcaption>
     </figure>
   </div>
 </section>
@@ -275,15 +275,15 @@
 <section class="ca-proof" id="proof">
   <div class="proof-copy">
     <div class="sec-kicker">Living portfolio · proof of work</div>
-    <h2>제가 만드는 시스템을,<br>저 자신에게도 사용합니다.</h2>
-    <p class="proof-lede">제 프로젝트와 경력을 목록으로만 남기지 않고, 직접 만든 대시보드로 운영합니다. 새 기록이 생길 때마다 데이터와 화면이 함께 업데이트되는 <b>살아있는 포트폴리오</b>입니다.</p>
+    <h2>The systems I build,<br>I run on myself too.</h2>
+    <p class="proof-lede">Rather than leaving my projects and career as a list, I operate them through a dashboard I built. Every new record updates both the data and the screen — a <b>living portfolio</b>.</p>
     <div class="proof-points">
-      <div class="proof-point"><b>01</b><span>무엇을 해왔는지, 커리어를 흐름으로 살펴봅니다.</span></div>
-      <div class="proof-point"><b>02</b><span>무엇을 할 수 있는지, 실제 화면으로 보여줍니다.</span></div>
-      <div class="proof-point"><b>03</b><span>새 프로젝트가 생기면 기록과 화면이 함께 자랍니다.</span></div>
+      <div class="proof-point"><b>01</b><span>What I have done, viewed as a career flow.</span></div>
+      <div class="proof-point"><b>02</b><span>What I can do, shown through real screens.</span></div>
+      <div class="proof-point"><b>03</b><span>As new projects arrive, the records and screens grow with them.</span></div>
     </div>
     <div class="ca-cta-row">
-      <a class="ca-btn ca-btn-primary" href="https://halodata.streamlit.app?lang=ko">작동하는 대시보드 보기 <span class="ar">↗</span></a>
+      <a class="ca-btn ca-btn-primary" href="https://halodata.streamlit.app?lang=en">See the working dashboard <span class="ar">↗</span></a>
     </div>
   </div>
   <div class="proof-visual">
@@ -294,52 +294,52 @@
          겹침 구도가 유지되고, 캐러셀의 absolute 레이어와 겹침 레이어가 충돌하지 않는다. 흐름 도면은 캐러셀에서 몇 초만 노출되므로 상세본이 아니라
          압축본(provenance-compact.svg)을 쓴다. -->
     <div class="ca-carousel" data-carousel>
-      <img class="is-active" src="assets/screens/halo-proof-stack.webp" data-cap="Overview · Build log — 운영 중인 실제 화면" alt="커리어 대시보드 Overview 화면과 빌드 활동 히트맵을 겹쳐 놓은 모습" loading="eager" width="1400" height="782">
-      <img src="assets/provenance-compact.svg" data-cap="Data provenance · 기록에서 화면까지" alt="옵시디언 기록이 규칙 레이어를 거쳐 빌드되고 대시보드로 이어지는 데이터 생산 흐름 도면" loading="eager" width="1400" height="782">
+      <img class="is-active" src="../assets/screens/halo-proof-stack.webp" data-cap="Overview · Build log — the screens actually in operation" alt="Career dashboard Overview screen layered over the build activity heatmap" loading="eager" width="1400" height="782">
+      <img src="../assets/provenance-compact.en.svg" data-cap="Data provenance · from records to screens" alt="Diagram of the data production flow where Obsidian records pass through a rules layer, get built, and continue into the dashboard" loading="eager" width="1400" height="782">
     </div>
-    <span class="ca-v5-cap" data-carousel-caption>Overview · Build log — 운영 중인 실제 화면</span>
+    <span class="ca-v5-cap" data-carousel-caption>Overview · Build log — the screens actually in operation</span>
   </div>
 </section>
 
 <!-- ── CONTACT — 마무리 CTA + 문의 폼 + P.S. ── -->
 <footer class="ca-foot" id="contact">
   <div class="ca-foot-cta">
-    <div class="ca-foot-kicker">Contact · 함께 일하기</div>
-    <h2>좋은 데이터는,<br><span class="ca-flow-em">좋은 질문</span>에서 시작됩니다.</h2>
-    <p class="ca-foot-lede">정보가 여러 곳에 흩어져 있거나, 숫자가 헷갈리거나, 보고서를 봐도 다음 행동이 보이지 않는다면 — <b>지금의 상황부터 함께 정리</b>해보겠습니다.</p>
+    <div class="ca-foot-kicker">Contact · working together</div>
+    <h2>Good data starts<br><span class="ca-flow-em">with a good question</span>.</h2>
+    <p class="ca-foot-lede">If information sits in several places, if the numbers do not agree, or if a report still leaves the next step unclear — <b>let us start by sorting out where things stand</b>.</p>
   </div>
 
   <!-- P.S. 는 폼 위에 둔다 — 폼을 만나기 전에 "거창한 의뢰가 아니어도 된다"를 먼저 읽어야
        입력 문턱이 낮아진다. 폼 아래에 두면 이미 쓸지 말지 정한 뒤에 읽게 된다(사용자 요청). -->
-  <p class="ca-foot-note"><span class="ps">P.S.</span> <span>거창한 의뢰가 아니어도 괜찮아요. <span class="uline">데이터 때문에 막막한 순간<svg viewBox="0 0 220 8" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5 C44 1 70 8 110 3.4 C150 -1 180 7 218 4"/></svg></span>이 있다면, 그 얘기부터 편하게 들려주세요.</span></p>
+  <p class="ca-foot-note"><span class="ps">P.S.</span> <span>It does not have to be a formal request. <span class="uline">If data has you stuck somewhere<svg viewBox="0 0 220 8" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5 C44 1 70 8 110 3.4 C150 -1 180 7 218 4"/></svg></span>, start with that — I am glad to hear it.</span></p>
 
   <!-- 폼은 페이지에 직접 둔다 — Streamlit 판에서 iframe(components.html)을 쓴 건 st.html 이
        <script> 를 새니타이즈했기 때문이고, 정적에서는 그 우회가 필요 없다. 색도 CSS 변수를 그대로 쓴다. -->
   <div class="cf-card" id="cf-card">
-    <div class="cf-head">✉ 이메일로 문의</div>
+    <div class="cf-head">✉ Contact by email</div>
     <form class="cf" id="cf">
       <!-- 회신 경로 — 이메일이나 연락처 중 하나는 반드시 받는다(둘 다 비면 제출이 막힌다). 회신할
            방법이 없는 문의는 접수돼도 답을 드릴 수 없기 때문이다(사용자 결정: 연락처 필드 추가). -->
       <div class="cf-row">
-        <div class="cf-field"><label for="cf-email">회신받을 이메일</label><input id="cf-email" name="email" type="email" placeholder="you@company.com"></div>
-        <div class="cf-field"><label for="cf-contact">연락처</label><input id="cf-contact" name="contact" placeholder="전화·카카오톡 등"></div>
+        <div class="cf-field"><label for="cf-email">Email for reply</label><input id="cf-email" name="email" type="email" placeholder="you@company.com"></div>
+        <div class="cf-field"><label for="cf-contact">Other contact</label><input id="cf-contact" name="contact" placeholder="Phone, messenger, etc."></div>
       </div>
-      <p class="cf-hint">이메일이나 연락처 중 <b>하나는 꼭</b> 남겨 주세요 — 회신드릴 방법이 필요해요.</p>
+      <p class="cf-hint">Please leave <b>at least one</b> of email or contact — I need a way to reply.</p>
       <div class="cf-row">
-        <div class="cf-field"><label for="cf-name">성함 / 회사</label><input id="cf-name" name="name" placeholder="선택 입력"></div>
-        <div class="cf-field"><label for="cf-subject">제목</label><input id="cf-subject" name="subject" placeholder="어떤 일로 연락 주셨나요?"></div>
+        <div class="cf-field"><label for="cf-name">Name / Company</label><input id="cf-name" name="name" placeholder="Optional"></div>
+        <div class="cf-field"><label for="cf-subject">Subject</label><input id="cf-subject" name="subject" placeholder="What brings you here?"></div>
       </div>
-      <div class="cf-field"><label for="cf-message">내용</label><textarea id="cf-message" name="message" placeholder="데이터 때문에 막막한 순간, 그 얘기부터 편하게 적어주세요."></textarea></div>
+      <div class="cf-field"><label for="cf-message">Message</label><textarea id="cf-message" name="message" placeholder="If data has you stuck somewhere, start with that."></textarea></div>
       <input type="checkbox" name="botcheck" class="cf-hp" tabindex="-1" autocomplete="off">
       <div class="cf-actions">
-        <button type="submit" id="cf-btn">보내기 →</button>
+        <button type="submit" id="cf-btn">Send →</button>
         <div class="cf-status" id="cf-status" role="status" aria-live="polite"></div>
       </div>
     </form>
   </div>
 
   <div class="ca-foot-id">
-    <span class="glyph"></span><b>Halo</b> · 김소율(서로)
+    <span class="glyph"></span><b>Halo</b> · Soyoul Kim (Seoro)
     <small>Built 2026-07-31</small>
   </div>
 </footer>
@@ -350,7 +350,7 @@
 <script>
   // 사용자 노출 문자열은 로케일별 사전 하나로 주입한다 — JS 로직은 한 벌만 두고 키로 읽는다.
   // 문자열을 따옴표 안에 손으로 끼우지 않는다(quote·개행·스크립트 종료 문자열 사고 방지).
-  var I18N = {"carousel_role": "캐러셀", "carousel_dots": "화면 선택", "carousel_label": "화면 갤러리", "carousel_pause": "자동 전환 멈추기", "carousel_play": "자동 전환 다시 시작", "dot_aria": "{n}번째 화면 보기", "mail_copied": "복사됨 ✓", "form_head": "✉ 이메일로 문의", "form_no_key": "문의 폼이 아직 설정되지 않았어요. {mail} 로 보내주세요.", "form_need_message": "내용을 입력해 주세요.", "form_need_contact": "회신받을 이메일이나 연락처 중 하나는 남겨 주세요.", "form_sending": "보내는 중…", "form_submit": "보내기 →", "form_success": "보냈어요! 확인하는 대로 회신드릴게요.", "form_fail": "전송 실패: {reason} — {mail} 로 보내주세요.", "form_network": "네트워크 문제로 전송하지 못했어요 — {mail} 로 보내주세요.", "form_subject_prefix": "[포트폴리오 문의] ", "form_subject_default": "데이터 협업 문의", "form_from_default": "포트폴리오 방문자"};
+  var I18N = {"carousel_role": "carousel", "carousel_dots": "Choose a screen", "carousel_label": "Screen gallery", "carousel_pause": "Pause auto-rotation", "carousel_play": "Resume auto-rotation", "dot_aria": "Go to slide {n}", "mail_copied": "Copied ✓", "form_head": "✉ Contact by email", "form_no_key": "The contact form is not set up yet. Please write to {mail}.", "form_need_message": "Please enter a message.", "form_need_contact": "Please leave either an email or another contact.", "form_sending": "Sending…", "form_submit": "Send →", "form_success": "Sent. I will reply as soon as I see it.", "form_fail": "Send failed: {reason} — please write to {mail}.", "form_network": "A network problem stopped the send — please write to {mail}.", "form_subject_prefix": "[Portfolio inquiry] ", "form_subject_default": "Data collaboration inquiry", "form_from_default": "Portfolio visitor"};
   function msg(key, values) {
     return (I18N[key] || '').replace(/\{(\w+)\}/g, function (_, name) {
       return values && values[name] != null ? values[name] : '';
