@@ -62,9 +62,12 @@
   <g fill="none" stroke="#54615a" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" marker-end="url(#tip)">
     <path d="M130 210 H196"/>
     <path d="M314 210 H390"/>
-    <path d="M256 236 V272"/>
-    <path d="M392 300 H316"/>
-    <path d="M512 300 H547 V210 H568"/>
+    <!-- ETL 이 mart 를 만든다 — ETL 좌측(타일 사이 여백)에서 나와 mart 위로 내려온다.
+         이전에는 raw 에서 mart 로 직결돼 있어 ETL 을 건너뛰는 것처럼 읽혔다. -->
+    <path d="M392 255 H256 V272"/>
+    <!-- mart 를 Athena 가 읽는다. 가로 구간이 LAMBDA 타일을 지나지만, 타일이 이 엣지 그룹보다
+         뒤에 그려져 선을 덮는다 — 원본 도면과 같은 "박스 뒤로 지나가는" 표현이다. -->
+    <path d="M314 300 H547 V210 H568"/>
     <path d="M700 210 H758"/>
     <path d="M1018 210 H1068" marker-start="url(#tip)"/>
     <path d="M380 430 H316"/>
